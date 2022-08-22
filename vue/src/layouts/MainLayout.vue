@@ -27,7 +27,7 @@
           </q-btn-dropdown>
         </template>
         <q-space />
-        <q-tab :ripple="false" class="q-px-none q-tab--logout" @click="logout" v-if="isUserSuperAdmin">
+        <q-tab :ripple="false" class="q-px-none q-tab--logout" @click="logout" v-if="!isIframe">
           <div class="q-px-md tab-label" v-t="'COREWEBCLIENT.ACTION_LOGOUT'"></div>
         </q-tab>
       </q-tabs>
@@ -57,6 +57,8 @@ export default {
       pages: [],
 
       selectedTenantId: null,
+
+      isIframe: window.frameElement,
     }
   },
 
@@ -89,7 +91,7 @@ export default {
 
     isUserSuperAdmin () {
       return this.$store.getters['user/isUserSuperAdmin']
-    },
+    }
   },
 
   watch: {

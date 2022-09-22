@@ -9,6 +9,19 @@
         <q-card-section>
           <component v-bind:is="mainDataComponent" ref="mainDataComponent" :currentTenantId="currentTenantId"
                      :user="user" :createMode="createMode" @save="handleSave" />
+          <div class="row q-mb-md" v-if="userCreatedAtString">
+            <div class="col-2" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_CREATED'"/>
+            <div class="col-5 text-weight-medium">
+              <span>{{ userCreatedAtString }}</span>
+            </div>
+          </div>
+          <div class="row q-mb-md">
+            <div class="col-2" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_LAST_LOGIN'"/>
+            <div class="col-5 text-weight-medium">
+              <span v-if="userLastLoginAtString">{{ userLastLoginAtString }}</span>
+              <div v-else class="col-5 text-weight-medium" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_NEVER_LOGIN'"></div>
+            </div>
+          </div>
           <div class="row" v-if="allowMakeTenant">
             <div class="col-2"></div>
             <div class="col-5">
@@ -97,6 +110,8 @@ import cache from 'src/cache'
 import modulesManager from 'src/modules-manager'
 import settings from 'src/settings'
 
+import moment from 'moment'
+
 import UserModel from 'src/classes/user'
 
 import enums from 'src/enums'
@@ -129,6 +144,12 @@ export default {
   },
 
   computed: {
+    userCreatedAtString() {
+      return this.user?.completeData?.CreatedAt ? moment(this.user?.completeData?.CreatedAt).format('L HH:mm') : null
+    },
+    userLastLoginAtString() {
+      return this.user?.completeData?.LastLogin ? moment(this.user?.completeData?.LastLogin).format('L HH:mm') : null
+    },
     currentTenantId () {
       return this.$store.getters['tenants/getCurrentTenantId']
     },

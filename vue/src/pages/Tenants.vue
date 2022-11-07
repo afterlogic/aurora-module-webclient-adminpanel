@@ -20,7 +20,7 @@
               </q-tooltip>
             </q-btn>
           </q-toolbar>
-          <StandardList 
+          <StandardList
             ref="tenantList"
             class="col-grow list-border"
             :items="tenantItems"

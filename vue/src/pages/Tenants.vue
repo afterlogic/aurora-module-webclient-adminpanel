@@ -20,12 +20,21 @@
               </q-tooltip>
             </q-btn>
           </q-toolbar>
-          <StandardList class="col-grow list-border" :items="tenantItems" :selectedItem="selectedTenantId" :loading="loadingTenants"
-                        :search="search" :page="page" :pagesCount="pagesCount"
-                        :noItemsText="'ADMINPANELWEBCLIENT.INFO_NO_ENTITIES_TENANT'"
-                        :noItemsFoundText="'ADMINPANELWEBCLIENT.INFO_NO_ENTITIES_FOUND_TENANT'"
-                        :hideControls="true"
-                        ref="tenantList" @route="route" @check="afterCheck"/>
+          <StandardList 
+            ref="tenantList"
+            class="col-grow list-border"
+            :items="tenantItems"
+            :selectedItem="selectedTenantId"
+            :loading="loadingTenants"
+            :search="search"
+            :page="page"
+            :pagesCount="pagesCount"
+            :hideControls="isUserSuperAdmin ? false : true"
+            :noItemsText="'ADMINPANELWEBCLIENT.INFO_NO_ENTITIES_TENANT'"
+            :noItemsFoundText="'ADMINPANELWEBCLIENT.INFO_NO_ENTITIES_FOUND_TENANT'"
+            @route="route"
+            @check="afterCheck"
+          />
         </div>
       </template>
       <template v-slot:after>

@@ -15,11 +15,11 @@
               <span>{{ userCreatedAtString }}</span>
             </div>
           </div>
-          <div class="row q-mb-md">
+          <div class="row q-mb-md" v-if="!createMode">
             <div class="col-2" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_LAST_LOGIN'"/>
             <div class="col-5 text-weight-medium">
               <span v-if="userLastLoginAtString">{{ userLastLoginAtString }}</span>
-              <div v-else class="col-5 text-weight-medium" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_NEVER_LOGIN'"></div>
+              <span v-else v-t="'ADMINPANELWEBCLIENT.LABEL_USER_NEVER_LOGIN'"></span>
             </div>
           </div>
           <div class="row" v-if="allowMakeTenant">

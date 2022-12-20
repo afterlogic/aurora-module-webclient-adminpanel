@@ -2,6 +2,7 @@ import enums from 'src/enums'
 import routesManager from 'src/router/routes-manager'
 import settings from 'src/settings'
 import store from 'src/store'
+import { convertLocalstorageData } from 'src/convert-localstorage-data'
 
 import Empty from 'components/Empty'
 import EditTenant from 'components/EditTenant'
@@ -14,6 +15,7 @@ export default {
   requiredModules: [],
 
   init (appData) {
+    convertLocalstorageData()
     settings.init(appData)
   },
 

@@ -170,8 +170,8 @@ export default {
       tabs: [],
       selectedTab: '',
 
-      listSplitterWidth: typesUtils.pInt(localStorage.getItem('users-list-splitter-width'), 20),
-      tabsSplitterWidth: typesUtils.pInt(localStorage.getItem('users-tabs-splitter-width'), 20),
+      listSplitterWidth: typesUtils.pInt(localStorage.getItem('aurora_admin_users_splitter-width'), 20),
+      tabsSplitterWidth: typesUtils.pInt(localStorage.getItem('aurora_admin_users_tabs_splitter-width'), 20),
 
       filters: [],
       currentFiltersRoutes: {},
@@ -283,11 +283,11 @@ export default {
     },
 
     listSplitterWidth (listSplitterWidth) {
-      localStorage.setItem('users-list-splitter-width', listSplitterWidth)
+      localStorage.setItem('aurora_admin_users_splitter-width', listSplitterWidth)
     },
 
     tabsSplitterWidth (tabsSplitterWidth) {
-      localStorage.setItem('users-tabs-splitter-width', tabsSplitterWidth)
+      localStorage.setItem('aurora_admin_users_tabs_splitter-width', tabsSplitterWidth)
     }
   },
 

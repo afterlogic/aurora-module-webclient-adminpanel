@@ -46,7 +46,7 @@ export default {
     return {
       tabs: [],
 
-      splitterWidth: typesUtils.pInt(localStorage.getItem('system-splitter-width'), 20),
+      splitterWidth: typesUtils.pInt(localStorage.getItem('aurora_admin_system_splitter-width'), 20),
 
       currentTabName: '',
     }
@@ -62,7 +62,7 @@ export default {
     },
 
     splitterWidth () {
-      localStorage.setItem('system-splitter-width', this.splitterWidth)
+      localStorage.setItem('aurora_admin_system_splitter-width', this.splitterWidth)
     }
   },
 

@@ -90,7 +90,7 @@ export default {
 
       deletingIds: [],
 
-      listSplitterWidth: typesUtils.pInt(localStorage.getItem('groups-list-splitter-width'), 20),
+      listSplitterWidth: typesUtils.pInt(localStorage.getItem('aurora_admin_groups_splitter-width'), 20),
     }
   },
 
@@ -157,7 +157,7 @@ export default {
     },
 
     listSplitterWidth () {
-      localStorage.setItem('groups-list-splitter-width', this.listSplitterWidth)
+      localStorage.setItem('aurora_admin_groups_splitter-width', this.listSplitterWidth)
     },
   },
 

@@ -41,10 +41,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import core from 'src/core'
 import modulesManager from 'src/modules-manager'
-import settings from 'src/settings'
 
 export default {
   name: 'MainLayout',
@@ -104,13 +102,8 @@ export default {
     this.selectedTenantId = this.currentTenantId
     this.$store.dispatch('tenants/requestTenants')
 
-    const
-      userRole = this.$store.getters['user/getUserRole'],
-      pagesOrder = settings.getTabsBarOrder(userRole)
-    this.pages = _.sortBy(modulesManager.getPagesForUserRole(userRole), (page) => {
-      const index = _.indexOf(pagesOrder, page.pageName)
-      return index !== -1 ? index : pagesOrder.length
-    })
+    const userRole = this.$store.getters['user/getUserRole']
+    this.pages = modulesManager.getPagesForUserRole(userRole)
   },
 
   methods: {

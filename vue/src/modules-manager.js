@@ -12,7 +12,7 @@ let availableModules = []
 
 let allModules = null
 let allModulesNames = []
-let pages = null
+let allPages = null
 
 let tenantEditDataComponent = null
 
@@ -89,21 +89,26 @@ export default {
   },
 
   getPages () {
-    if (pages === null && allModules !== null) {
-      pages = []
+    if (allPages === null && allModules !== null) {
+      allPages = []
       allModules.forEach(module => {
         const modulePages = _.isFunction(module.getPages) && module.getPages()
         if (_.isArray(modulePages)) {
-          pages = pages.concat(modulePages)
+          allPages = allPages.concat(modulePages)
         }
       })
     }
-    return pages === null ? [] : pages
+    return allPages === null ? [] : allPages
   },
 
   getPagesForUserRole (userRole) {
-    if (pages !== null) {
-      return pages.filter(page => _.indexOf(page.pageUserRoles, userRole) !== -1)
+    if (allPages !== null) {
+      const pagesOrder = settings.getTabsBarOrder(userRole)
+      const userRolePages = allPages.filter(page => _.indexOf(page.pageUserRoles, userRole) !== -1)
+      return _.sortBy(userRolePages, (page) => {
+        const index = _.indexOf(pagesOrder, page.pageName)
+        return index !== -1 ? index : pagesOrder.length
+      })
     }
     return []
   },
@@ -111,11 +116,8 @@ export default {
   getDefaultPageForUser () {
     const
       userRole = store.getters['user/getUserRole'],
-      pages = this.getPagesForUserRole(userRole),
-      pagesOrder = settings.getTabsBarOrder(userRole),
-      page = (pagesOrder.length > 0 && pages.find(page => page.pageName === pagesOrder[0])) || null
-
-    return page
+      pages = this.getPagesForUserRole(userRole)
+    return pages.length ? pages[0] : null
   },
 
   /**

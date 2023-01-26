@@ -26,7 +26,12 @@ require('./prepare-files')
 
 console.log('Start building the app...')
 const execSync = require('child_process').execSync
-execSync('quasar build')
+
+if (parseInt(process.version.match(/^v*(\d+)/)[1]) >= 17) {
+  execSync('quasar build', { env: { NODE_OPTIONS: '--openssl-legacy-provider' } })
+} else {
+  execSync('quasar build')
+}
 
 const srcDir = './dist/spa'
 if (fse.existsSync(srcDir)) {

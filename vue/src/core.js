@@ -17,13 +17,13 @@ import settings from 'src/settings'
 const core = {
   appData: null,
 
-  setAuthTokenCookie (authToken) {
+  setAuthTokenCookie(authToken) {
     const cookieSettings = settings.getCookieSettings()
     const expire = cookieSettings.authTokenCookieExpireTime > 0 ? cookieSettings.authTokenCookieExpireTime + 'd' : ''
     VueCookies.set('AuthToken', authToken, expire)
   },
 
-  setAuthToken (authToken) {
+  setAuthToken(authToken) {
     const cookieSettings = settings.getCookieSettings()
     if (_.isEmpty(authToken)) {
       const currentAuthToken = VueCookies.get('AuthToken')
@@ -35,21 +35,26 @@ const core = {
         VueCookies.remove('AuthToken', cookieSettings.cookieBasePath)
         this.commitAuthToken(authToken)
       } else {
-        webApi.sendRequest({
-          moduleName: 'Core',
-          methodName: 'GetAppData',
-          parameters: {},
-        }).then(result => {
-          const UserRoles = enums.getUserRoles()
-          if (result?.User?.Role === UserRoles.SuperAdmin) {
-            VueCookies.remove('AuthToken', cookieSettings.cookieBasePath)
-          } else if (result?.User?.Role === UserRoles.TenantAdmin) {
-            authToken = secondAuthToken
-          }
-          this.commitAuthToken(authToken)
-        }, response => {
-          this.commitAuthToken(authToken)
-        })
+        webApi
+          .sendRequest({
+            moduleName: 'Core',
+            methodName: 'GetAppData',
+            parameters: {},
+          })
+          .then(
+            (result) => {
+              const UserRoles = enums.getUserRoles()
+              if (result?.User?.Role === UserRoles.SuperAdmin) {
+                VueCookies.remove('AuthToken', cookieSettings.cookieBasePath)
+              } else if (result?.User?.Role === UserRoles.TenantAdmin) {
+                authToken = secondAuthToken
+              }
+              this.commitAuthToken(authToken)
+            },
+            (response) => {
+              this.commitAuthToken(authToken)
+            }
+          )
       }
     } else {
       this.setAuthTokenCookie(authToken)
@@ -57,12 +62,12 @@ const core = {
     }
   },
 
-  commitAuthToken (authToken) {
+  commitAuthToken(authToken) {
     store.commit('user/setAuthToken', authToken)
     this.requestAppData()
   },
 
-  parseTenantsFromAppData () {
+  parseTenantsFromAppData() {
     const adminPanelWebclientData = typesUtils.pObject(this.appData?.AdminPanelWebclient)
     const tenantsData = typesUtils.pArray(adminPanelWebclientData?.Tenants?.Items)
     if (tenantsData.length > 0) {
@@ -72,7 +77,7 @@ const core = {
     }
   },
 
-  setAppData (appData) {
+  setAppData(appData) {
     return new Promise((resolve, reject) => {
       this.appData = appData
       enums.init(appData)
@@ -86,37 +91,42 @@ const core = {
     })
   },
 
-  requestAppData () {
+  requestAppData() {
     return new Promise((resolve, reject) => {
-      webApi.sendRequest({
-        moduleName: 'Core',
-        methodName: 'GetAppData',
-        parameters: {},
-      }).then(result => {
-        if (_.isObject(result)) {
-          this.setAppData(result).then(() => {
-            if (store.getters['user/isUserSuperAdminOrTenantAdmin']) {
-              this.parseTenantsFromAppData()
-              // Resets AuthToken cookie to continue signing in period,
-              // also to make sure that AuthToken cookie is set with the correct path
-              this.setAuthTokenCookie(store.getters['user/getAuthToken'])
+      webApi
+        .sendRequest({
+          moduleName: 'Core',
+          methodName: 'GetAppData',
+          parameters: {},
+        })
+        .then(
+          (result) => {
+            if (_.isObject(result)) {
+              this.setAppData(result).then(() => {
+                if (store.getters['user/isUserSuperAdminOrTenantAdmin']) {
+                  this.parseTenantsFromAppData()
+                  // Resets AuthToken cookie to continue signing in period,
+                  // also to make sure that AuthToken cookie is set with the correct path
+                  this.setAuthTokenCookie(store.getters['user/getAuthToken'])
+                }
+                resolve()
+              }, reject)
+            } else {
+              notification.showError(i18n.tc('COREWEBCLIENT.ERROR_UNKNOWN'))
+              reject()
             }
-            resolve()
-          }, reject)
-        } else {
-          notification.showError(i18n.tc('COREWEBCLIENT.ERROR_UNKNOWN'))
-          reject()
-        }
-      }, response => {
-        notification.showError(errors.getTextFromResponse(response, i18n.tc('COREWEBCLIENT.ERROR_UNKNOWN')))
-        reject()
-      })
+          },
+          (response) => {
+            notification.showError(errors.getTextFromResponse(response, i18n.tc('COREWEBCLIENT.ERROR_UNKNOWN')))
+            reject()
+          }
+        )
     })
   },
 }
 
 export default {
-  init () {
+  init() {
     return new Promise((resolve, reject) => {
       if (core.appData === null) {
         core.requestAppData().then(resolve, reject)
@@ -126,21 +136,28 @@ export default {
     })
   },
 
-  logout () {
-    webApi.sendRequest({
-      moduleName: 'Core',
-      methodName: 'Logout',
-      parameters: {},
-    }).then(() => {
-      core.setAuthToken('')
-    }, () => {
-      core.setAuthToken('')
-    })
+  logout(afterLogoutCallback = () => {}) {
+    webApi
+      .sendRequest({
+        moduleName: 'Core',
+        methodName: 'Logout',
+        parameters: {},
+      })
+      .then(
+        () => {
+          core.setAuthToken('')
+          afterLogoutCallback()
+        },
+        () => {
+          core.setAuthToken('')
+          afterLogoutCallback()
+        }
+      )
   },
 
   setAuthToken: core.setAuthToken.bind(core),
 
-  getAppData () {
+  getAppData() {
     return core.appData
   },
 }

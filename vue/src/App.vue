@@ -10,6 +10,7 @@ import _ from 'lodash'
 
 import types from 'src/utils/types'
 
+import core from 'src/core'
 import modulesManager from 'src/modules-manager'
 
 import UnsavedChangesDialog from 'src/components/UnsavedChangesDialog'
@@ -31,7 +32,11 @@ Vue.mixin({
       const oAppComponent = this._getParentComponent('App')
       const oUnsavedChangesDialog = oAppComponent ? oAppComponent.$refs.unsavedChangesDialog : null
 
-      if (_.isFunction(this.hasChanges) && this.hasChanges() && _.isFunction(oUnsavedChangesDialog?.openConfirmDiscardChangesDialog)) {
+      if (
+        _.isFunction(this.hasChanges) &&
+        this.hasChanges() &&
+        _.isFunction(oUnsavedChangesDialog?.openConfirmDiscardChangesDialog)
+      ) {
         oUnsavedChangesDialog.openConfirmDiscardChangesDialog(() => {
           if (this.revertChanges) {
             this.revertChanges()
@@ -42,7 +47,7 @@ Vue.mixin({
         next()
       }
     },
-  }
+  },
 })
 
 export default {
@@ -52,14 +57,9 @@ export default {
     UnsavedChangesDialog,
   },
 
-  data() {
+  meta() {
     return {
-    }
-  },
-
-  meta () {
-    return {
-      title: this.siteName
+      title: this.siteName,
     }
   },
 
@@ -85,25 +85,31 @@ export default {
   },
 
   methods: {
-    setRoute () {
-      const currentPath = this.$router.currentRoute && this.$router.currentRoute.path ? this.$router.currentRoute.path : ''
-      const newPath = this.isUserSuperAdminOrTenantAdmin ? '/system' : '/'
-      if (currentPath !== newPath) {
-        this.$router.push({ path: newPath })
+    handleMessageEvent(event) {
+      if (event && event.origin === window.location.origin && event.data && event.data.eventName === 'logout') {
+        core.logout(() => {
+          window.parent.postMessage({ eventName: 'after-logout' }, event.origin)
+        })
       }
+    },
+  },
+
+  mounted() {
+    if (window.frameElement) {
+      window.addEventListener('message', this.handleMessageEvent)
+    } else {
+      window.document.getElementsByTagName('body')[0].classList.add('body-background')
     }
   },
 
-  mounted () {
-    if (!window.frameElement) {
-      window.document.getElementsByTagName('body')[0].classList.add('body-backgroud')
-    }
+  beforeDestroy() {
+    window.removeEventListener('message', this.handleMessageEvent)
   },
 }
 </script>
 
 <style lang="scss">
-.body-backgroud {
-  background: #1998a4 no-repeat 0 0 / cover url("~assets/background.jpg");
+.body-background {
+  background: #1998a4 no-repeat 0 0 / cover url('~assets/background.jpg');
 }
 </style>

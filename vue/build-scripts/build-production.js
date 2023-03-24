@@ -1,5 +1,5 @@
+const fs = require('fs')
 const fse = require('fs-extra')
-const fs = require('fs-extra')
 
 const removeDir = function(path) {
   if (fs.existsSync(path)) {
@@ -34,17 +34,17 @@ if (parseInt(process.version.match(/^v*(\d+)/)[1]) >= 17) {
 }
 
 const srcDir = './dist/spa'
-if (fse.existsSync(srcDir)) {
+if (fs.existsSync(srcDir)) {
   console.log('The app is built successfully')
 
   const destDir = '../../../adminpanel/'
-  if (fse.existsSync(destDir)) {
+  if (fs.existsSync(destDir)) {
     removeDir(destDir)
   }
 
   console.log('Start moving app files to the adminpanel directory...')
-  fse.moveSync(srcDir, destDir)
-  fse.renameSync(destDir + 'index.html', destDir + 'main.html')
+  fse.moveSync(srcDir, destDir) //requires fs-extra
+  fs.renameSync(destDir + 'index.html', destDir + 'main.html')
   console.log('The app is now in the adminpanel directory')
 
   console.log('Start to create index.php...')

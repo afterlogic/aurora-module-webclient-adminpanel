@@ -8,6 +8,7 @@ import typesUtils from 'src/utils/types'
 const errorsCodes = {
   InvalidToken: 101,
   AuthError: 102,
+  InvalidInputParameter: 103,
   DataBaseError: 104,
   LicenseProblem: 105,
   DemoLimitations: 106,
@@ -15,7 +16,11 @@ const errorsCodes = {
   AccessDenied: 108,
   UserAlreadyExists: 111,
   SystemNotConfigured: 112,
+  ModuleNotFound: 113,
+  MethodNotFound: 114,
   LicenseLimit: 115,
+  MethodAccessDenied: 116,
+
   CanNotChangePassword: 502,
   AccountOldPasswordNotCorrect: 1020,
   AccountAlreadyExists: 704,
@@ -76,39 +81,39 @@ const errorsUtils = {
   _getCoreErrorByCode (errorCode, defaultText) {
     switch (errorCode) {
       case errorsCodes.AuthError:
-        return i18n.tc('COREWEBCLIENT.ERROR_PASS_INCORRECT')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_PASS_INCORRECT')
       case errorsCodes.DataBaseError:
-        return i18n.tc('COREWEBCLIENT.ERROR_DATABASE')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_DATABASE')
       case errorsCodes.LicenseProblem:
-        return i18n.tc('COREWEBCLIENT.ERROR_INVALID_LICENSE')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_INVALID_LICENSE')
       case errorsCodes.LicenseLimit:
-        return i18n.tc('COREWEBCLIENT.ERROR_LICENSE_USERS_LIMIT')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_LICENSE_USERS_LIMIT')
       case errorsCodes.DemoLimitations:
-        return i18n.tc('COREWEBCLIENT.INFO_DEMO_THIS_FEATURE_IS_DISABLED')
+        return i18n.global.tc('COREWEBCLIENT.INFO_DEMO_THIS_FEATURE_IS_DISABLED')
       case errorsCodes.Captcha:
-        return i18n.tc('COREWEBCLIENT.ERROR_CAPTCHA_IS_INCORRECT')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_CAPTCHA_IS_INCORRECT')
       case errorsCodes.AccessDenied:
         // if (response.AuthenticatedUserId === 0 && App.getUserId() !== 0) {
-        //   return i18n.tc('COREWEBCLIENT.ERROR_USER_DELETED')
+        //   return i18n.global.tc('COREWEBCLIENT.ERROR_USER_DELETED')
         // } else {
-        return i18n.tc('COREWEBCLIENT.ERROR_ACCESS_DENIED')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_ACCESS_DENIED')
       // }
       case errorsCodes.UserAlreadyExists:
-        return i18n.tc('COREWEBCLIENT.ERROR_USER_ALREADY_EXISTS')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_USER_ALREADY_EXISTS')
       case errorsCodes.CanNotChangePassword:
-        return i18n.tc('COREWEBCLIENT.ERROR_UNABLE_CHANGE_PASSWORD')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_UNABLE_CHANGE_PASSWORD')
       case errorsCodes.AccountOldPasswordNotCorrect:
-        return i18n.tc('COREWEBCLIENT.ERROR_CURRENT_PASSWORD_NOT_CORRECT')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_CURRENT_PASSWORD_NOT_CORRECT')
       case errorsCodes.AccountAlreadyExists:
-        return i18n.tc('COREWEBCLIENT.ERROR_ACCOUNT_ALREADY_EXISTS')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_ACCOUNT_ALREADY_EXISTS')
       case errorsCodes.DataTransferFailed:
-        return i18n.tc('COREWEBCLIENT.ERROR_DATA_TRANSFER_FAILED')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_DATA_TRANSFER_FAILED')
       case errorsCodes.NotDisplayedError:
         return ''
       case errorsCodes.SystemNotConfigured:
-        return i18n.tc('COREWEBCLIENT.ERROR_SYSTEM_NOT_CONFIGURED')
+        return i18n.global.tc('COREWEBCLIENT.ERROR_SYSTEM_NOT_CONFIGURED')
       default:
-        return defaultText || i18n.tc('COREWEBCLIENT.ERROR_UNKNOWN')
+        return defaultText || i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN')
     }
   },
 
@@ -156,6 +161,11 @@ export default {
   },
 
   isAuthError (errorCode) {
+    // return errorCode === errorsCodes.AuthError || errorCode === errorsCodes.AccessDenied
     return errorCode === errorsCodes.AuthError
+  },
+
+  isSystemError (errorCode) {
+    return errorCode === errorsCodes.ModuleNotFound || errorCode === errorsCodes.MethodNotFound
   },
 }

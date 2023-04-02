@@ -19,7 +19,7 @@ function prepareStores() {
     const paths = storesPaths.join('\n')
     const names = storesNames.join('\n')
     const storesContent =
-      `import Vue from 'vue'
+      `
 import Vuex from 'vuex'
 
 import user from './user'
@@ -27,8 +27,6 @@ import main from './main'
 import tenants from './tenants'
 import groups from './groups'
 ${paths}
-
-Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {

@@ -98,7 +98,8 @@ export default {
     },
 
     changeTab (tabName) {
-      const currentPath = this.$router.currentRoute && this.$router.currentRoute.path ? this.$router.currentRoute.path : ''
+      // const currentPath = this.$router.currentRoute. && this.$router.currentRoute.path ? this.$router.currentRoute.path : ''
+      const currentPath = this.$route?.path || ''
       const newPath = '/system/' + tabName
       if (currentPath !== newPath) {
         this.$router.push(newPath)

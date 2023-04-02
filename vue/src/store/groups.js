@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { i18n } from 'src/boot/i18n'
 import _ from 'lodash'
 import store from 'src/store'
@@ -20,7 +19,7 @@ export default {
 
   mutations: {
     setGroups (state, { tenantId, groups }) {
-      Vue.set(state.groups, tenantId, groups)
+      state.groups[tenantId] = groups
     },
 
     updateGroup (state, { tenantId, id, data }) {
@@ -30,7 +29,7 @@ export default {
         const group = new GroupModel()
         group.copy(tenantGroups[groupIndex])
         group.update(data.Name, data.SiteName, data)
-        Vue.set(state.groups[tenantId], groupIndex, group)
+        state.groups[tenantId][groupIndex] = group
       }
     },
   },
@@ -80,12 +79,12 @@ export default {
             if (group) {
               cache.addUsersToGroup(group, usersIds)
             }
-            notification.showReport(i18n.tc('ADMINPANELWEBCLIENT.REPORT_ADD_TO_GROUP_PLURAL', usersIds.length))
+            notification.showReport(i18n.global.tc('ADMINPANELWEBCLIENT.REPORT_ADD_TO_GROUP_PLURAL', usersIds.length))
           } else {
-            notification.showError(i18n.tc('ADMINPANELWEBCLIENT.ERROR_ADD_TO_GROUP_PLURAL', usersIds.length))
+            notification.showError(i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_ADD_TO_GROUP_PLURAL', usersIds.length))
           }
         }, response => {
-          notification.showError(errors.getTextFromResponse(response, i18n.tc('ADMINPANELWEBCLIENT.ERROR_ADD_TO_GROUP_PLURAL', usersIds.length)))
+          notification.showError(errors.getTextFromResponse(response, i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_ADD_TO_GROUP_PLURAL', usersIds.length)))
         })
       }
     },
@@ -107,12 +106,12 @@ export default {
               cache.removeUsersFromGroup(group, usersIds)
               callback()
             }
-            notification.showReport(i18n.tc('ADMINPANELWEBCLIENT.REPORT_REMOVE_FROM_GROUP_PLURAL', usersIds.length))
+            notification.showReport(i18n.global.tc('ADMINPANELWEBCLIENT.REPORT_REMOVE_FROM_GROUP_PLURAL', usersIds.length))
           } else {
-            notification.showError(i18n.tc('ADMINPANELWEBCLIENT.ERROR_REMOVE_FROM_GROUP_PLURAL', usersIds.length))
+            notification.showError(i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_REMOVE_FROM_GROUP_PLURAL', usersIds.length))
           }
         }, response => {
-          notification.showError(errors.getTextFromResponse(response, i18n.tc('ADMINPANELWEBCLIENT.ERROR_REMOVE_FROM_GROUP_PLURAL', usersIds.length)))
+          notification.showError(errors.getTextFromResponse(response, i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_REMOVE_FROM_GROUP_PLURAL', usersIds.length)))
         })
       }
     },

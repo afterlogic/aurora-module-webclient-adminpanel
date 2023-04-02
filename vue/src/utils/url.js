@@ -8,7 +8,7 @@ export default {
    *
    * @return {string}
    */
-  getAdminAppPath () {
+  getAdminAppPath() {
     const appOrigin = window.location.origin || window.location.protocol + '//' + window.location.host
 
     return appOrigin + window.location.pathname
@@ -17,9 +17,10 @@ export default {
   /**
    * @returns {string}
    */
-  getApiHost () {
+  getApiHost() {
     let apiHost = process.env.API
-    if (typesUtils.isNonEmptyString(apiHost) && apiHost.lastIndexOf('/') !== (apiHost.length - 1)) {
+    // let apiHost = "http://corp.de";
+    if (typesUtils.isNonEmptyString(apiHost) && apiHost.lastIndexOf('/') !== apiHost.length - 1) {
       apiHost += '/'
     }
     return apiHost
@@ -33,9 +34,9 @@ export default {
    *
    * @return {string|null}
    */
-  getRequestParam (paramName) {
+  getRequestParam(paramName) {
     if (this.getParams === undefined) {
-      const params = (location.search !== '') ? (location.search.substr(1)).split('&') : []
+      const params = location.search !== '' ? location.search.substr(1).split('&') : []
       const getParams = []
 
       if (params.length > 0) {

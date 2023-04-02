@@ -1,4 +1,4 @@
-import { i18n } from 'src/boot/i18n'
+import { i18n } from 'boot/i18n'
 import VueCookies from 'vue-cookies'
 
 import _ from 'lodash'
@@ -112,12 +112,12 @@ const core = {
                 resolve()
               }, reject)
             } else {
-              notification.showError(i18n.tc('COREWEBCLIENT.ERROR_UNKNOWN'))
+              notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN'))
               reject()
             }
           },
           (response) => {
-            notification.showError(errors.getTextFromResponse(response, i18n.tc('COREWEBCLIENT.ERROR_UNKNOWN')))
+            notification.showError(errors.getTextFromResponse(response, i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN')))
             reject()
           }
         )

@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import _ from 'lodash'
 
 import types from 'src/utils/types'
@@ -15,7 +15,7 @@ import modulesManager from 'src/modules-manager'
 
 import UnsavedChangesDialog from 'src/components/UnsavedChangesDialog'
 
-Vue.mixin({
+const mixins = {
   methods: {
     _getParentComponent: function (sComponentName) {
       let oComponent = null
@@ -48,9 +48,10 @@ Vue.mixin({
       }
     },
   },
-})
+}
 
-export default {
+export default defineComponent({
+  mixins: [mixins],
   name: 'App',
 
   components: {
@@ -74,7 +75,8 @@ export default {
 
   watch: {
     isUserSuperAdminOrTenantAdmin: function () {
-      const currentRoute = this.$router.currentRoute
+      const currentRoute = this.$router.currentRoute.value
+      // const currentRoute = this.$route
       const currentPath = currentRoute?.path
       const matchedRoutes = types.pArray(currentRoute?.matched)
       const correctedPath = modulesManager.correctPathForUser(matchedRoutes)
@@ -102,14 +104,18 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('message', this.handleMessageEvent)
   },
-}
+})
 </script>
 
 <style lang="scss">
+html {
+  height: 100%;
+}
 .body-background {
   background: #1998a4 no-repeat 0 0 / cover url('~assets/background.jpg');
+  min-height: 100%;
 }
 </style>

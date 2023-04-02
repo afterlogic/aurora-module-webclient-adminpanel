@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import _ from 'lodash'
 import store from 'src/store'
 
@@ -37,7 +36,7 @@ export default {
         const tenant = new TenantModel()
         tenant.copy(state.tenants[tenantIndex])
         tenant.setCompleteData(data)
-        Vue.set(state.tenants, tenantIndex, tenant)
+        state.tenants[tenantIndex] = tenant
       }
     },
 
@@ -47,7 +46,7 @@ export default {
         const tenant = new TenantModel()
         tenant.copy(state.tenants[tenantIndex])
         tenant.update(data.Name, data.SiteName, data)
-        Vue.set(state.tenants, tenantIndex, tenant)
+        state.tenants[tenantIndex] = tenant
       }
     },
   },

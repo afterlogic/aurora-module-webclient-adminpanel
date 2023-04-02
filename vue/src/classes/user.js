@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import _ from 'lodash'
 
 import typesUtils from 'src/utils/types'
@@ -19,7 +18,7 @@ class UserModel {
     this.uuid = typesUtils.pString(serverData?.UUID)
     this.quotaBytes = typesUtils.pInt(serverData?.QuotaBytes)
 
-    Vue.set(this, 'groups', typesUtils.pArray(serverData.Groups).map(groupData => new GroupModel(groupData)))
+    this.groups = typesUtils.pArray(serverData.Groups).map(groupData => new GroupModel(groupData))
 
     this.setCompleteData(completeData)
   }
@@ -47,18 +46,18 @@ class UserModel {
 
     if (_.isArray(allTenantGroups)) {
       const groupIds = typesUtils.pArray(data?.GroupIds)
-      Vue.set(this, 'groups', groupIds.map(id => allTenantGroups.find(group => group.id === id)))
+      this.groups = groupIds.map(id => allTenantGroups.find(group => group.id === id))
     }
   }
 
   addGroup (groupToAdd) {
     if (!this.groups.find(group => group.id === groupToAdd.id)) {
-      Vue.set(this, 'groups', this.groups.concat([groupToAdd]))
+      this.groups = this.groups.concat([groupToAdd])
     }
   }
 
   removeGroup (groupToRemove) {
-    Vue.set(this, 'groups', this.groups.filter(group => group.id !== groupToRemove.id))
+    this.groups = this.groups.filter(group => group.id !== groupToRemove.id)
   }
 
   getData (field) {

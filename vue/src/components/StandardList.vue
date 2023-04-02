@@ -15,13 +15,13 @@
       </q-item>
       <q-separator />
     </q-list>
-    <q-inner-loading style="position: relative; min-height: 4px;" :showing="loading">
-      <q-linear-progress query />
-    </q-inner-loading>
     <q-scroll-area class="col-grow relative-position">
+      <q-inner-loading style="justify-content: flex-start;" :showing="loading">
+        <q-linear-progress query />
+      </q-inner-loading>
       <div v-if="search" class="text-right">
         <q-btn dense flat no-caps color="primary" class="no-hover q-mr-sm" :label="$t('COREWEBCLIENT.ACTION_CLEAR_SEARCH')"
-               @click.native.stop="clearSearch"/>
+               @click.stop="clearSearch"/>
       </div>
       <div v-if="search" class="text-center text-h6 text-grey-5 text-weight-regular">
         {{ $tc('ADMINPANELWEBCLIENT.INFO_SEARCH_RESULT', search, { SEARCH: search }) }}

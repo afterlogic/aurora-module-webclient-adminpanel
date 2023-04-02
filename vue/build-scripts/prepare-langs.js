@@ -97,7 +97,7 @@ function prepareOneLang(modulesPath, iniFileName, langFolder) {
   _.each(langsJson, (moduleJson, moduleName) => {
     const newModuleJson = {}
     _.each(moduleJson, (constValue, constName) => {
-      constValue = constValue.replace(/^"/, '').replace(/"$/, '').replace(/\\"/g, '"')
+      constValue = constValue.replace(/^"/, '').replace(/"$/, '').replace(/\\"/g, '"').replace(/@/g, "{'@'}")
       if (constValue.indexOf('%') !== -1) {
         const re = /%([\w_\-=]+)%/gi
         constValue = constValue.replace(re, (match, p1, offset, string) => {

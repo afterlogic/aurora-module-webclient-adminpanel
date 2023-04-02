@@ -2,7 +2,6 @@ import _ from 'lodash'
 import VueCookies from 'vue-cookies'
 
 import UserModel from 'src/classes/user'
-
 import enums from 'src/enums'
 
 export default {
@@ -15,11 +14,11 @@ export default {
   },
 
   mutations: {
-    setAuthToken (state, authToken) {
+    setAuthToken(state, authToken) {
       state.authToken = authToken
     },
 
-    setUserData (state, userData) {
+    setUserData(state, userData) {
       const user = new UserModel(null, userData, userData)
       if (!_.isEmpty(user)) {
         state.userRole = user.role
@@ -29,32 +28,32 @@ export default {
   },
 
   actions: {
-    parseAppData ({ commit }, appData) {
+    parseAppData({ commit }, appData) {
       commit('setUserData', appData.User)
     },
   },
 
   getters: {
-    getAuthToken (state) {
+    getAuthToken(state) {
       return state.authToken
     },
 
-    isUserSuperAdmin (state) {
+    isUserSuperAdmin(state) {
       const UserRoles = enums.getUserRoles()
       return state.userRole === UserRoles.SuperAdmin
     },
 
-    isUserAnonymous (state) {
+    isUserAnonymous(state) {
       const UserRoles = enums.getUserRoles()
       return state.userRole === UserRoles.Anonymous
     },
 
-    isUserTenantAdmin (state) {
+    isUserTenantAdmin(state) {
       const UserRoles = enums.getUserRoles()
       return state.userRole === UserRoles.TenantAdmin
     },
 
-    isUserSuperAdminOrTenantAdmin (state) {
+    isUserSuperAdminOrTenantAdmin(state) {
       const UserRoles = enums.getUserRoles()
       return state.userRole === UserRoles.SuperAdmin || state.userRole === UserRoles.TenantAdmin
     },

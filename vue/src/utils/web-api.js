@@ -5,6 +5,8 @@ import VueCookies from 'vue-cookies'
 
 import errors from 'src/utils/errors'
 import urlUtils from 'src/utils/url'
+import notification from 'src/utils/notification'
+import { i18n } from 'boot/i18n'
 
 import core from 'src/core'
 import eventBus from 'src/event-bus'
@@ -36,38 +38,71 @@ export default {
       if (authToken) {
         headers.Authorization = 'Bearer ' + authToken
       }
-
       axios({
         method: 'post',
         url: urlUtils.getApiHost() + '?/Api/',
         data: new URLSearchParams(postData),
         headers,
       })
-        .then((response) => {
-          const isOkResponse = response?.status === 200 && !!response?.data
-          if (isOkResponse) {
-            eventBus.$emit('webApi::Response', { moduleName, methodName, parameters, response: response.data })
-            const result = response.data.Result
-            if (!result && (response.data.ErrorCode || response.data.ErrorMessage || response.data.SubscriptionsResult)) {
-              if (store.getters['user/isUserSuperAdminOrTenantAdmin'] && errors.isAuthError(response.data.ErrorCode) && methodName !== 'Logout') {
-                core.logout()
+        .then(
+          (response) => {
+            const isOkResponse = response?.status === 200 && !!response?.data
+            if (isOkResponse) {
+              eventBus.$emit('webApi::Response', {
+                moduleName,
+                methodName,
+                parameters,
+                response: response.data,
+              })
+              const result = response.data.Result
+              if (
+                !result &&
+                (response.data.ErrorCode || response.data.ErrorMessage || response.data.SubscriptionsResult)
+              ) {
+                if (
+                  store.getters['user/isUserSuperAdminOrTenantAdmin'] &&
+                  errors.isAuthError(response.data.ErrorCode) &&
+                  methodName !== 'Logout'
+                ) {
+                  core.logout()
+                } if (errors.isSystemError(response.data.ErrorCode)) {
+                  notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN'))
+                } else {
+                  reject(response.data)
+                }
               } else {
-                reject(response.data)
+                resolve(result)
               }
             } else {
-              resolve(result)
+              eventBus.$emit('webApi::Response', {
+                moduleName,
+                methodName,
+                parameters,
+                response: unknownError,
+              })
+              reject(unknownError)
             }
-          } else {
-            eventBus.$emit('webApi::Response', { moduleName, methodName, parameters, response: unknownError })
+          },
+          () => {
+            eventBus.$emit('webApi::Response', {
+              moduleName,
+              methodName,
+              parameters,
+              response: unknownError,
+            })
             reject(unknownError)
           }
-        }, () => {
-          eventBus.$emit('webApi::Response', { moduleName, methodName, parameters, response: unknownError })
-          reject(unknownError)
-        })
+        )
         .catch((error) => {
-          const errorResponse = _.extend(unknownError, { ErrorMessage: error.message })
-          eventBus.$emit('webApi::Response', { moduleName, methodName, parameters, response: errorResponse })
+          const errorResponse = _.extend(unknownError, {
+            ErrorMessage: error.message,
+          })
+          eventBus.$emit('webApi::Response', {
+            moduleName,
+            methodName,
+            parameters,
+            response: errorResponse,
+          })
           reject(errorResponse)
         })
     })
@@ -95,20 +130,19 @@ export default {
         method: 'post',
         url: urlUtils.getApiHost() + '?/Api/',
         data: data,
-        headers: headers
+        headers: headers,
+      }).then((oResponse) => {
+        if (oResponse) {
+          let resData = oResponse.data.split('\n')
+          resData.pop()
+          resData = resData.join('\n')
+          const oBlob = new Blob([resData])
+          saveAs(oBlob, fileName)
+          resolve()
+        } else {
+          reject()
+        }
       })
-        .then((oResponse) => {
-          if (oResponse) {
-            let resData = oResponse.data.split('\n')
-            resData.pop()
-            resData = resData.join('\n')
-            const oBlob = new Blob([resData])
-            saveAs(oBlob, fileName)
-            resolve()
-          } else {
-            reject()
-          }
-        })
     })
-  }
+  },
 }

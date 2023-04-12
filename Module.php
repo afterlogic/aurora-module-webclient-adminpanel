@@ -85,9 +85,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                 $iTenantId = isset($Data['TenantId']) ? $Data['TenantId'] : null;
                 $iRole = isset($Data['Role']) ? $Data['Role'] : null;
                 $bWriteSeparateLog = isset($Data['WriteSeparateLog']) ? $Data['WriteSeparateLog'] : null;
-                $iQuotaBytes = isset($Data['QuotaBytes']) ? $Data['QuotaBytes'] : null;
-                $sPassword = isset($Data['Password']) ? $Data['Password'] : null;
-                return \Aurora\Modules\Core\Module::Decorator()->UpdateUser($iId, $sPublicId, $iTenantId, $iRole, $bWriteSeparateLog, $iQuotaBytes, $sPassword);
+                return \Aurora\Modules\Core\Module::Decorator()->UpdateUser($iId, $sPublicId, $iTenantId, $iRole, $bWriteSeparateLog);
         }
         return false;
     }

@@ -20,6 +20,15 @@ namespace Aurora\Modules\AdminPanelWebclient;
 class Module extends \Aurora\System\Module\AbstractWebclientModule
 {
     /**
+     *
+     * @return Module
+     */
+    public static function Decorator()
+    {
+        return parent::Decorator();
+    }
+
+    /**
      * @deprecated since version 8.3.7
      */
     public function TestDbConnection($DbLogin, $DbName, $DbHost, $DbPassword = null)

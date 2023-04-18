@@ -29,6 +29,15 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
     }
 
     /**
+     *
+     * @return Settings
+     */
+    protected function GetModuleSettings()
+    {
+        return $this->oModuleSettings;
+    }
+
+    /**
      * @deprecated since version 8.3.7
      */
     public function TestDbConnection($DbLogin, $DbName, $DbHost, $DbPassword = null)

@@ -14,6 +14,8 @@ namespace Aurora\Modules\AdminPanelWebclient;
  * @license https://afterlogic.com/products/common-licensing Afterlogic Software License
  * @copyright Copyright (c) 2023, Afterlogic Corp.
  *
+ * @property Settings $oModuleSettings
+ *
  * @package Modules
  * @internal
  */
@@ -144,7 +146,6 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
         \Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
 
         $aTenants = [];
-        $oSettings = $this->getModuleSettings();
 
         try {
             // Settings should be obtainable even if db is not configured yet
@@ -153,9 +154,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
         }
 
         return array(
-            'EntitiesPerPage' => $oSettings->EntitiesPerPage,
-            'TabsOrder' => $oSettings->TabsOrder,
-            'EntitiesOrder' => $oSettings->EntitiesOrder,
+            'EntitiesPerPage' => $this->oModuleSettings->EntitiesPerPage,
+            'TabsOrder' => $this->oModuleSettings->TabsOrder,
+            'EntitiesOrder' => $this->oModuleSettings->EntitiesOrder,
             'Tenants' => $aTenants,
         );
     }

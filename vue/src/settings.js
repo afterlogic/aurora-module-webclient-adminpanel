@@ -72,7 +72,10 @@ class AdminPanelSettings {
     if (store.getters['user/isUserSuperAdmin']) {
       this.showErrorIfConfigIsAccessible()
       if (!this.adminHasPassword) {
-        this.dismissPasswordError = notification.showError(i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_ADMIN_EMPTY_PASSWORD'), 0)
+        this.dismissPasswordError = notification.showError(
+          i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_ADMIN_EMPTY_PASSWORD'),
+          0
+        )
       }
       if (!this.saltNotEmpty) {
         notification.showError(i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_SALT_EMPTY'), 0)
@@ -296,6 +299,14 @@ export default {
   },
 
   getCookieSettings() {
+    if (!settings) {
+      return {
+        authTokenCookieExpireTime: 0,
+        cookieSecure: true,
+        cookiePath: '/',
+        cookieBasePath: '/',
+      }
+    }
     const pathParts = settings.cookiePath.split('/')
     let lastPart = pathParts[pathParts.length - 1]
     if (_.isEmpty(lastPart) && pathParts.length > 2) {

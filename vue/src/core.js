@@ -108,17 +108,19 @@ const core = {
                   // Resets AuthToken cookie to continue signing in period,
                   // also to make sure that AuthToken cookie is set with the correct path
                   this.setAuthTokenCookie(store.getters['user/getAuthToken'])
+                } else if (VueCookies.get('AuthToken') !== null) {
+                  this.setAuthToken('')
                 }
                 resolve()
               }, reject)
             } else {
               notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN'))
-              reject()
+              reject(i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN'))
             }
           },
           (response) => {
             notification.showError(errors.getTextFromResponse(response, i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN')))
-            reject()
+            reject(errors.getTextFromResponse(response, i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN')))
           }
         )
     })

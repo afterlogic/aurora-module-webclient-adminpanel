@@ -300,11 +300,12 @@ export default {
 
   getCookieSettings() {
     if (!settings) {
+      VueCookies.config('', window.location.pathname, '', true)
       return {
         authTokenCookieExpireTime: 0,
         cookieSecure: true,
-        cookiePath: '/',
-        cookieBasePath: '/',
+        cookiePath: window.location.pathname,
+        cookieBasePath: window.location.pathname.replace('/adminpanel', ''),
       }
     }
     const pathParts = settings.cookiePath.split('/')

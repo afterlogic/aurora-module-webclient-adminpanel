@@ -46,7 +46,12 @@ export default route(function (/* { store, ssrContext } */) {
   })
 
   let routesAdded = false
+  let isAppLoadError = false
   Router.beforeEach((to, from, next) => {
+    if (isAppLoadError && to.path === '/app-not-loaded') {
+      next()
+      return
+    }
     core.init().then(
       () => {
         if (!routesAdded) {
@@ -76,6 +81,8 @@ export default route(function (/* { store, ssrContext } */) {
       },
       (error) => {
         console.log('core.init reject', error)
+        isAppLoadError = true
+        next('/app-not-loaded')
       }
     )
   })

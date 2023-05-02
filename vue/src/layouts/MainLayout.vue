@@ -3,22 +3,44 @@
     <q-header>
       <q-tabs class="q-py-sm" v-bind:class="getTabsBarClass()" no-caps align="left" indicator-color="transparent">
         <template v-for="page in pages">
-          <q-route-tab :key="page.pageName" :to="page.pagePath" :ripple="false" class="q-px-none" v-if="page.pageName !== 'tenants'">
-            <div class="q-px-md tab-label">{{ $t(page.pageTitle)}}</div>
+          <q-route-tab
+            :key="page.pageName"
+            :to="page.pagePath"
+            :ripple="false"
+            class="q-px-none"
+            v-if="page.pageName !== 'tenants'"
+          >
+            <div class="q-px-md tab-label">{{ $t(page.pageTitle) }}</div>
           </q-route-tab>
-          <q-route-tab :key="page.pageName" to="/tenants" :ripple="false" class="q-px-none" v-if="page.pageName === 'tenants'">
+          <q-route-tab
+            :key="page.pageName"
+            to="/tenants"
+            :ripple="false"
+            class="q-px-none"
+            v-if="page.pageName === 'tenants'"
+          >
             <div class="q-px-md tab-label">
               <span v-t="'ADMINPANELWEBCLIENT.HEADING_TENANTS_SETTINGS_TABNAME'"></span>
               <span v-if="tenantOptions.length > 1">:</span>
             </div>
           </q-route-tab>
-          <q-btn-dropdown :key="page.pageName + '_btn'" no-icon-animation cover auto-close stretch flat dense
-                          :ripple="false" @click.stop
-                          v-if="page.pageName === 'tenants' && tenantOptions.length > 1" :label="selectedTenantName"
-                          class="q-px-none text-weight-regular no-hover tenants-dropdown">
+          <q-btn-dropdown
+            :key="page.pageName + '_btn'"
+            no-icon-animation
+            cover
+            auto-close
+            stretch
+            flat
+            dense
+            :ripple="false"
+            @click.stop
+            v-if="page.pageName === 'tenants' && tenantOptions.length > 1"
+            :label="selectedTenantName"
+            class="q-px-none text-weight-regular no-hover tenants-dropdown"
+          >
             <q-list class="non-selectable" v-for="tenant in tenantOptions" :key="tenant.id">
               <q-item clickable @click="changeTenant(tenant.id)">
-                <q-item-section>{{tenant.name}}</q-item-section>
+                <q-item-section>{{ tenant.name }}</q-item-section>
                 <q-item-section avatar v-show="tenant.id === selectedTenantId">
                   <q-icon name="arrow_drop_up" />
                 </q-item-section>
@@ -47,8 +69,7 @@ import modulesManager from 'src/modules-manager'
 export default {
   name: 'MainLayout',
 
-  components: {
-  },
+  components: {},
 
   data() {
     return {
@@ -61,14 +82,14 @@ export default {
   },
 
   computed: {
-    currentTenantId () {
+    currentTenantId() {
       return this.$store.getters['tenants/getCurrentTenantId']
     },
 
-    tenantOptions () {
+    tenantOptions() {
       const tenants = this.$store.getters['tenants/getTenants']
       const options = []
-      tenants.forEach(tenant => {
+      tenants.forEach((tenant) => {
         const option = {
           id: tenant.id,
           name: tenant.name,
@@ -82,23 +103,23 @@ export default {
       return options
     },
 
-    selectedTenantName () {
-      const currentTenant = this.tenantOptions.find(tenant => tenant.id === this.selectedTenantId)
+    selectedTenantName() {
+      const currentTenant = this.tenantOptions.find((tenant) => tenant.id === this.selectedTenantId)
       return currentTenant ? currentTenant.name : ''
     },
 
-    isUserSuperAdmin () {
+    isUserSuperAdmin() {
       return this.$store.getters['user/isUserSuperAdmin']
-    }
+    },
   },
 
   watch: {
-    currentTenantId () {
+    currentTenantId() {
       this.selectedTenantId = this.currentTenantId
     },
   },
 
-  mounted () {
+  mounted() {
     this.selectedTenantId = this.currentTenantId
     this.$store.dispatch('tenants/requestTenants')
 
@@ -107,15 +128,17 @@ export default {
   },
 
   methods: {
-    changeTenant (id) {
+    changeTenant(id) {
       this.$store.commit('tenants/setCurrentTenantId', id)
     },
 
-    logout () {
-      core.logout()
+    logout() {
+      core.logout(() => {
+        this.$router.push('/')
+      })
     },
 
-    getTabsBarClass () {
+    getTabsBarClass() {
       return {
         tabsbar: window.frameElement,
       }
@@ -131,6 +154,6 @@ export default {
 }
 
 .tabsbar {
-  border-top: solid 1px #d4d4d4
+  border-top: solid 1px #d4d4d4;
 }
 </style>

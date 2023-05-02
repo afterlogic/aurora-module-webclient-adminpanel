@@ -19,7 +19,6 @@ export default {
    */
   getApiHost() {
     let apiHost = process.env.API
-    // let apiHost = "http://corp.de";
     if (typesUtils.isNonEmptyString(apiHost) && apiHost.lastIndexOf('/') !== apiHost.length - 1) {
       apiHost += '/'
     }

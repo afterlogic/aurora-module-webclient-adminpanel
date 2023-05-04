@@ -14,7 +14,6 @@ const path = require('path')
 const { configure } = require('quasar/wrappers')
 
 module.exports = configure(function (ctx) {
-  console.log(ctx)
   return {
     // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
     supportTS: false,
@@ -48,7 +47,7 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       env: {
-        API: ctx.dev ? 'http://corp.de/' : '',
+        API: ctx.dev ? 'http://platform.de/' : '',
       },
       // transpile: false,
       // publicPath: '/',

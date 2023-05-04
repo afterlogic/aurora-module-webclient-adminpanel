@@ -96,10 +96,6 @@ export default {
       return this.$store.getters['tenants/getCurrentTenantId']
     },
 
-    allTenants () {
-      return this.$store.getters['tenants/getTenants']
-    },
-
     createMode () {
       return this.tenant?.id === 0
     },
@@ -133,9 +129,12 @@ export default {
       this.parseRoute()
     },
 
-    allTenants () {
-      this.populate()
-    },
+    '$store.state.tenants.tenants': {
+      handler: function () {
+        this.populate()
+      },
+      deep: true
+    }
   },
 
   methods: {

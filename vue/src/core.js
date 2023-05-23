@@ -108,7 +108,7 @@ const core = {
                   // Resets AuthToken cookie to continue signing in period,
                   // also to make sure that AuthToken cookie is set with the correct path
                   this.setAuthTokenCookie(store.getters['user/getAuthToken'])
-                } else if (VueCookies.get('AuthToken') !== null) {
+                } else if (VueCookies.get('AuthToken') !== null && store.getters['user/isUserAnonymous']) {
                   this.setAuthToken('')
                 }
                 resolve()

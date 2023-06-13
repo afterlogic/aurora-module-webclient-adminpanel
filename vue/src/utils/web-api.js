@@ -69,7 +69,8 @@ export default {
                   methodName !== 'Logout'
                 ) {
                   core.logout()
-                } if (errors.isSystemError(response.data.ErrorCode)) {
+                }
+                if (errors.isSystemError(response.data.ErrorCode)) {
                   notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_UNKNOWN'))
                 } else {
                   reject(response.data)

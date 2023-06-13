@@ -5,7 +5,7 @@ import _ from 'lodash'
 let dismissLoading = null
 
 export default {
-  showError (message, timeout) {
+  showError(message, timeout) {
     if (!_.isInteger(timeout)) {
       timeout = 10000
     }
@@ -23,7 +23,7 @@ export default {
     })
   },
 
-  showReport (message) {
+  showReport(message) {
     Notify.create({
       color: 'info',
       textColor: 'white',
@@ -38,7 +38,7 @@ export default {
     })
   },
 
-  showLoading (message) {
+  showLoading(message) {
     this.hideLoading()
     dismissLoading = Notify.create({
       color: 'warning',
@@ -54,7 +54,7 @@ export default {
     })
   },
 
-  hideLoading () {
+  hideLoading() {
     if (_.isFunction(dismissLoading)) {
       dismissLoading()
       dismissLoading = null

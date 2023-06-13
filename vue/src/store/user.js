@@ -16,6 +16,10 @@ export default {
   mutations: {
     setAuthToken(state, authToken) {
       state.authToken = authToken
+      if (!authToken) {
+        state.userRole = null
+        state.userPublicId = null
+      }
     },
 
     setUserData(state, userData) {

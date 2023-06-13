@@ -163,6 +163,10 @@ export default {
     errorsUtils.setModulesErrors(appData)
   },
 
+  getSilentErrorCode() {
+    return errorsCodes.NotDisplayedError
+  },
+
   getTextFromResponse(response, defaultText) {
     return errorsUtils.getTextFromResponse(response, defaultText)
   },

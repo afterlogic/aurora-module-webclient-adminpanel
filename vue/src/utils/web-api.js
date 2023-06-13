@@ -13,10 +13,14 @@ import eventBus from 'src/event-bus'
 import store from 'src/store'
 
 export default {
-  sendRequest: function ({ moduleName, methodName, parameters }) {
+  sendRequest: function ({ moduleName, methodName, parameters, signal }) {
     return new Promise((resolve, reject) => {
       const unknownError = {
         ErrorCode: 0,
+        Module: moduleName,
+      }
+      const silentError = {
+        ErrorCode: errors.getSilentErrorCode(),
         Module: moduleName,
       }
 
@@ -47,22 +51,20 @@ export default {
         url: urlUtils.getApiHost() + '?/Api/',
         data: new URLSearchParams(postData),
         headers,
-      })
-        .then(
-          (response) => {
-            const isOkResponse = response?.status === 200 && !!response?.data
-            if (isOkResponse) {
-              eventBus.$emit('webApi::Response', {
-                moduleName,
-                methodName,
-                parameters,
-                response: response.data,
-              })
-              const result = response.data.Result
-              if (
-                !result &&
-                (response.data.ErrorCode || response.data.ErrorMessage || response.data.SubscriptionsResult)
-              ) {
+        signal,
+      }).then(
+        (response) => {
+          const isOkResponse = response?.status === 200 && !!response?.data
+          if (isOkResponse) {
+            eventBus.$emit('webApi::Response', {
+              moduleName,
+              methodName,
+              parameters,
+              response: response.data,
+            })
+            const result = response.data.Result
+            if (!result) {
+              if (response.data.ErrorCode || response.data.ErrorMessage || response.data.SubscriptionsResult) {
                 if (
                   store.getters['user/isUserSuperAdminOrTenantAdmin'] &&
                   errors.isAuthError(response.data.ErrorCode) &&
@@ -76,19 +78,12 @@ export default {
                   reject(response.data)
                 }
               } else {
-                resolve(result)
+                reject(unknownError)
               }
             } else {
-              eventBus.$emit('webApi::Response', {
-                moduleName,
-                methodName,
-                parameters,
-                response: unknownError,
-              })
-              reject(unknownError)
+              resolve(result)
             }
-          },
-          () => {
+          } else {
             eventBus.$emit('webApi::Response', {
               moduleName,
               methodName,
@@ -97,19 +92,17 @@ export default {
             })
             reject(unknownError)
           }
-        )
-        .catch((error) => {
-          const errorResponse = _.extend(unknownError, {
-            ErrorMessage: error.message,
-          })
+        },
+        (error) => {
           eventBus.$emit('webApi::Response', {
             moduleName,
             methodName,
             parameters,
-            response: errorResponse,
+            response: error.code === 'ERR_CANCELED' ? silentError : unknownError,
           })
-          reject(errorResponse)
-        })
+          reject(error.code === 'ERR_CANCELED' ? silentError : unknownError)
+        }
+      )
     })
   },
 

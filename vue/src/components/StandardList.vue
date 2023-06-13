@@ -31,7 +31,7 @@
         />
       </div>
       <div v-if="search" class="text-center text-h6 text-grey-5 text-weight-regular">
-        {{ $tc('ADMINPANELWEBCLIENT.INFO_SEARCH_RESULT', search, { SEARCH: search }) }}
+        {{ $t('ADMINPANELWEBCLIENT.INFO_SEARCH_RESULT', { SEARCH: search }) }}
       </div>
       <div
         v-if="!loading && items.length === 0 && !search"

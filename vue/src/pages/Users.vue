@@ -243,10 +243,6 @@ export default {
       return count > 0 ? count : ''
     },
 
-    totalCountText() {
-      return this.$tc('ADMINPANELWEBCLIENT.LABEL_USERS_COUNT', this.totalCount, { COUNT: this.totalCount })
-    },
-
     showTabs() {
       return this.tabs.length > 0 && this.selectedUserId > 0
     },

@@ -1,14 +1,22 @@
 <template>
   <main-layout>
-    <q-splitter :after-class="!showTabs ? 'q-splitter__right-panel' : ''" class="full-height full-width"
-                v-model="listSplitterWidth" :limits="[10,30]"
+    <q-splitter
+      :after-class="!showTabs ? 'q-splitter__right-panel' : ''"
+      class="full-height full-width"
+      v-model="listSplitterWidth"
+      :limits="[10, 30]"
     >
       <template v-slot:before>
         <div class="flex column full-height">
           <q-toolbar class="col-auto q-py-sm list-border">
             <div class="flex">
-              <q-btn flat color="grey-8" size="mg" no-wrap :disable="checkedIds.length === 0"
-                     @click="askDeleteCheckedUsers"
+              <q-btn
+                flat
+                color="grey-8"
+                size="mg"
+                no-wrap
+                :disable="checkedIds.length === 0"
+                @click="askDeleteCheckedUsers"
               >
                 <trash-icon></trash-icon>
                 <span>{{ countLabel }}</span>
@@ -23,8 +31,11 @@
                 </q-tooltip>
               </q-btn>
               <span v-if="allTenantGroups.length > 0 && isUserSuperAdmin">
-                <q-btn-dropdown flat color="grey-8" size="mg"
-                                :disable="checkedOrSelectedUsersIds.length === 0 || groups.length === 0"
+                <q-btn-dropdown
+                  flat
+                  color="grey-8"
+                  size="mg"
+                  :disable="checkedOrSelectedUsersIds.length === 0 || groups.length === 0"
                 >
                   <template v-slot:label>
                     <add-to-group-icon></add-to-group-icon>
@@ -33,7 +44,13 @@
                     </q-tooltip>
                   </template>
                   <q-list>
-                    <q-item clickable v-close-popup v-for="group in groups" :key="group.id" @click="addUsersToGroup(group.id)">
+                    <q-item
+                      clickable
+                      v-close-popup
+                      v-for="group in groups"
+                      :key="group.id"
+                      @click="addUsersToGroup(group.id)"
+                    >
                       <q-item-section>
                         <q-item-label>{{ group.name }}</q-item-label>
                       </q-item-section>
@@ -47,16 +64,30 @@
                   </q-tooltip>
                 </q-btn>
               </span>
-              <component v-for="filter in filters" :key="filter.name" v-bind:is="filter" @filter-selected="routeFilter"
-                        @filter-filled-up="populateFiltersGetParameters" @allow-create-user="handleAllowCreateUser"/>
+              <component
+                v-for="filter in filters"
+                :key="filter.name"
+                v-bind:is="filter"
+                @filter-selected="routeFilter"
+                @filter-filled-up="populateFiltersGetParameters"
+                @allow-create-user="handleAllowCreateUser"
+              />
             </div>
           </q-toolbar>
 
-          <standard-list class="col-grow list-border" :items="userItems" :selectedItem="selectedUserId" :loading="loadingUsers"
-                        :search="search" :page="page" :pagesCount="pagesCount"
-                        :noItemsText="'ADMINPANELWEBCLIENT.INFO_NO_ENTITIES_USER'"
-                        :noItemsFoundText="'ADMINPANELWEBCLIENT.INFO_NO_ENTITIES_FOUND_USER'"
-                        ref="userList" @route="route" @check="afterCheck"
+          <standard-list
+            class="col-grow list-border"
+            :items="userItems"
+            :selectedItem="selectedUserId"
+            :loading="loadingUsers"
+            :search="search"
+            :page="page"
+            :pagesCount="pagesCount"
+            :noItemsText="'ADMINPANELWEBCLIENT.INFO_NO_ENTITIES_USER'"
+            :noItemsFoundText="'ADMINPANELWEBCLIENT.INFO_NO_ENTITIES_FOUND_USER'"
+            ref="userList"
+            @route="route"
+            @check="afterCheck"
           >
             <template v-slot:right-icon>
               <q-item-section side>
@@ -67,8 +98,13 @@
         </div>
       </template>
       <template v-slot:after>
-        <q-splitter after-class="q-splitter__right-panel" v-if="showTabs" class="full-height full-width"
-                    v-model="tabsSplitterWidth" :limits="[10,30]">
+        <q-splitter
+          after-class="q-splitter__right-panel"
+          v-if="showTabs"
+          class="full-height full-width"
+          v-model="tabsSplitterWidth"
+          :limits="[10, 30]"
+        >
           <template v-slot:before>
             <q-list>
               <div>
@@ -77,35 +113,49 @@
                     <q-item-label lines="1" v-t="'ADMINPANELWEBCLIENT.LABEL_COMMON_SETTINGS_TAB'"></q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-separator/>
+                <q-separator />
               </div>
               <div v-for="tab in tabs" :key="tab.tabName">
                 <template v-if="tab.hideTabForSelectedUserRoles.indexOf(selectedUserRole) === -1">
-                  <q-item clickable @click="route(selectedUserId, tab.tabName)"
-                          :class="selectedTab === tab.tabName ? 'bg-selected-item' : ''">
+                  <q-item
+                    clickable
+                    @click="route(selectedUserId, tab.tabName)"
+                    :class="selectedTab === tab.tabName ? 'bg-selected-item' : ''"
+                  >
                     <q-item-section>
                       <q-item-label lines="1">{{ $t(tab.tabTitle) }}</q-item-label>
                     </q-item-section>
                   </q-item>
-                  <q-separator/>
+                  <q-separator />
                 </template>
               </div>
-              <q-inner-loading style="justify-content: flex-start;" :showing="deleting">
-                <q-linear-progress query/>
+              <q-inner-loading style="justify-content: flex-start" :showing="deleting">
+                <q-linear-progress query />
               </q-inner-loading>
             </q-list>
           </template>
           <template v-slot:after>
-            <router-view @no-user-found="handleNoUserFound" @user-created="handleCreateUser"
-                         @cancel-create="route" @delete-user="askDeleteUser" :deletingIds="deletingIds"
-                         :createMode="createMode"></router-view>
+            <router-view
+              @no-user-found="handleNoUserFound"
+              @user-created="handleCreateUser"
+              @cancel-create="route"
+              @delete-user="askDeleteUser"
+              :deletingIds="deletingIds"
+              :createMode="createMode"
+            ></router-view>
           </template>
         </q-splitter>
-        <router-view v-if="!showTabs" @no-user-found="handleNoUserFound" @user-created="handleCreateUser"
-                     @cancel-create="route" @delete-user="askDeleteUser" :deletingIds="deletingIds"
-                     :createMode="createMode"></router-view>
+        <router-view
+          v-if="!showTabs"
+          @no-user-found="handleNoUserFound"
+          @user-created="handleCreateUser"
+          @cancel-create="route"
+          @delete-user="askDeleteUser"
+          :deletingIds="deletingIds"
+          :createMode="createMode"
+        ></router-view>
       </template>
-      <ConfirmDialog ref="confirmDialog"/>
+      <ConfirmDialog ref="confirmDialog" />
     </q-splitter>
   </main-layout>
 </template>
@@ -144,7 +194,7 @@ export default {
     AddIcon,
     AddToGroupIcon,
     RemoveFromGroupIcon,
-    TrashIcon
+    TrashIcon,
   },
 
   data() {
@@ -180,48 +230,48 @@ export default {
   },
 
   computed: {
-    currentTenantId () {
+    currentTenantId() {
       return this.$store.getters['tenants/getCurrentTenantId']
     },
 
-    pagesCount () {
+    pagesCount() {
       return Math.ceil(this.totalCount / this.limit)
     },
 
-    countLabel () {
+    countLabel() {
       const count = this.checkedIds.length
       return count > 0 ? count : ''
     },
 
-    totalCountText () {
+    totalCountText() {
       return this.$tc('ADMINPANELWEBCLIENT.LABEL_USERS_COUNT', this.totalCount, { COUNT: this.totalCount })
     },
 
-    showTabs () {
+    showTabs() {
       return this.tabs.length > 0 && this.selectedUserId > 0
     },
 
-    deleting () {
+    deleting() {
       return this.deletingIds.indexOf(this.selectedUserId) !== -1
     },
 
-    createMode () {
+    createMode() {
       const createIndex = this.$route.path.indexOf('/create')
-      return createIndex !== -1 && createIndex === (this.$route.path.length - 7)
+      return createIndex !== -1 && createIndex === this.$route.path.length - 7
     },
 
-    allTenantGroups () {
+    allTenantGroups() {
       const groups = this.$store.getters['groups/getGroups']
       const allTenantGroups = typesUtils.pArray(groups[this.currentTenantId])
-      return allTenantGroups.filter(group => !group.isTeam)
+      return allTenantGroups.filter((group) => !group.isTeam)
     },
 
-    groups () {
+    groups() {
       const selectedGroupId = this.selectedGroupId
-      return this.allTenantGroups.filter(group => group.id !== selectedGroupId)
+      return this.allTenantGroups.filter((group) => group.id !== selectedGroupId)
     },
 
-    checkedOrSelectedUsersIds () {
+    checkedOrSelectedUsersIds() {
       if (this.checkedIds.length > 0) {
         return this.checkedIds
       }
@@ -231,19 +281,18 @@ export default {
       return []
     },
 
-    disableRemoveFromGroup () {
-      const selectedGroup = this.allTenantGroups.find(group => group.id === this.selectedGroupId)
+    disableRemoveFromGroup() {
+      const selectedGroup = this.allTenantGroups.find((group) => group.id === this.selectedGroupId)
       return !selectedGroup || this.checkedOrSelectedUsersIds.length <= 0
     },
 
-    selectedUserRole () {
-      const
-        selectedUser = this.users.find(user => user.id === this.selectedUserId),
+    selectedUserRole() {
+      const selectedUser = this.users.find((user) => user.id === this.selectedUserId),
         selectedUserRole = selectedUser && selectedUser.role
       return selectedUserRole || UserRoles.NormalUser
     },
 
-    isUserSuperAdmin () {
+    isUserSuperAdmin() {
       return this.$store.getters['user/isUserSuperAdmin']
     },
 
@@ -253,20 +302,20 @@ export default {
   },
 
   watch: {
-    currentTenantId () {
+    currentTenantId() {
       if (this.$route.path !== '/users') {
         this.route()
       }
       this.populate()
     },
 
-    $route (to, from) {
+    $route(to, from) {
       this.parseRoute()
     },
 
-    users () {
+    users() {
       const userPublicId = this.$store.getters['user/getUserPublicId']
-      this.userItems = this.users.map(user => {
+      this.userItems = this.users.map((user) => {
         return {
           id: user.id,
           title: user.publicId,
@@ -276,22 +325,22 @@ export default {
       })
     },
 
-    allowCreateUser () {
+    allowCreateUser() {
       if (!this.allowCreateUser && this.createMode) {
         this.$router.push('/users')
       }
     },
 
-    listSplitterWidth (listSplitterWidth) {
+    listSplitterWidth(listSplitterWidth) {
       localStorage.setItem('aurora_admin_users_splitter-width', listSplitterWidth)
     },
 
-    tabsSplitterWidth (tabsSplitterWidth) {
+    tabsSplitterWidth(tabsSplitterWidth) {
       localStorage.setItem('aurora_admin_users_tabs_splitter-width', tabsSplitterWidth)
-    }
+    },
   },
 
-  mounted () {
+  mounted() {
     UserRoles = enums.getUserRoles()
     this.populateFilters()
     this.populateTabs()
@@ -300,7 +349,7 @@ export default {
   },
 
   methods: {
-    parseRoute () {
+    parseRoute() {
       if (this.createMode) {
         this.selectedUserId = 0
       } else {
@@ -321,32 +370,35 @@ export default {
 
         const pathParts = this.$route.path.split('/')
         const lastPart = pathParts.length > 0 ? pathParts[pathParts.length - 1] : ''
-        const tab = this.tabs.find(tab => { return tab.tabName === lastPart })
+        const tab = this.tabs.find((tab) => {
+          return tab.tabName === lastPart
+        })
         this.selectedTab = tab ? tab.tabName : ''
       }
     },
 
-    handleAllowCreateUser (data) {
+    handleAllowCreateUser(data) {
       if (data.tenantId === this.currentTenantId) {
         this.allowCreateUser = data.allowCreateUser
       }
     },
 
-    populateFilters () {
+    populateFilters() {
       this.filters = modulesManager.getFiltersForUsers()
     },
 
-    populateTabs () {
-      this.tabs = modulesManager.getAdminEntityTabs('getAdminUserTabs').map(tab => {
+    populateTabs() {
+      this.tabs = modulesManager.getAdminEntityTabs('getAdminUserTabs').map((tab) => {
         return {
           tabName: tab.tabName,
           tabTitle: tab.tabTitle,
-          hideTabForSelectedUserRoles: tab.hideTabForSelectedUserRoles !== undefined ? tab.hideTabForSelectedUserRoles : []
+          hideTabForSelectedUserRoles:
+            tab.hideTabForSelectedUserRoles !== undefined ? tab.hideTabForSelectedUserRoles : [],
         }
       })
     },
 
-    populateFiltersGetParameters (filterGetParameter) {
+    populateFiltersGetParameters(filterGetParameter) {
       const newFiltersGetParameters = _.extend(_.clone(this.filtersGetParameters), filterGetParameter)
       if (!_.isEqual(newFiltersGetParameters, this.filtersGetParameters)) {
         this.filtersGetParameters = newFiltersGetParameters
@@ -354,19 +406,26 @@ export default {
       }
     },
 
-    populate () {
+    populate() {
       this.loadingUsers = true
-      cache.getUsers(this.currentTenantId, this.filtersGetParameters, this.search, this.page, this.limit)
+      cache
+        .getUsers(this.currentTenantId, this.filtersGetParameters, this.search, this.page, this.limit)
         .then(({ users, totalCount, tenantId, filtersGetParameters = {}, page = 1, search = '' }) => {
-          if (tenantId === this.currentTenantId && _.isEqual(filtersGetParameters, this.filtersGetParameters) &&
-            page === this.page && search === this.search
+          if (
+            tenantId === this.currentTenantId &&
+            _.isEqual(filtersGetParameters, this.filtersGetParameters) &&
+            page === this.page &&
+            search === this.search
           ) {
             this.users = users
             this.totalCount = totalCount
             this.loadingUsers = false
-            if (this.justCreatedId && users.find(user => {
-              return user.id === this.justCreatedId
-            })) {
+            if (
+              this.justCreatedId &&
+              users.find((user) => {
+                return user.id === this.justCreatedId
+              })
+            ) {
               this.route(this.justCreatedId)
               this.justCreatedId = 0
             }
@@ -374,24 +433,24 @@ export default {
         })
     },
 
-    getFiltersRoute () {
+    getFiltersRoute() {
       const filterRoutes = _.map(this.currentFiltersRoutes, (routeValue, routeName) => {
         return routeValue !== undefined ? routeName + '/' + routeValue : ''
       })
-      const filterRoutesValues = _.filter(filterRoutes, routeValue => {
+      const filterRoutesValues = _.filter(filterRoutes, (routeValue) => {
         return routeValue !== ''
       })
       return filterRoutesValues.length > 0 ? '/' + filterRoutesValues.join('/') : ''
     },
 
-    routeFilter (data) {
+    routeFilter(data) {
       if (this.currentFiltersRoutes[data.routeName] !== data.routeValue) {
         this.currentFiltersRoutes[data.routeName] = data.routeValue
         this.route()
       }
     },
 
-    route (userId = 0, tabName = '') {
+    route(userId = 0, tabName = '') {
       const enteredSearch = this.$refs?.userList?.enteredSearch || ''
       const searchRoute = enteredSearch !== '' ? `/search/${enteredSearch}` : ''
 
@@ -409,103 +468,114 @@ export default {
       }
     },
 
-    routeCreateUser () {
+    routeCreateUser() {
       this.$router.push('/users' + this.getFiltersRoute() + '/create')
     },
 
-    handleCreateUser (id) {
+    handleCreateUser(id) {
       this.justCreatedId = id
       this.route()
       this.populate()
     },
 
-    afterCheck (ids) {
+    afterCheck(ids) {
       this.checkedIds = ids
     },
 
-    handleNoUserFound () {
+    handleNoUserFound() {
       notification.showError(this.$t('ADMINPANELWEBCLIENT.ERROR_USER_NOT_FOUND'))
       this.route()
       this.populate()
     },
 
-    askDeleteUser (id) {
+    askDeleteUser(id) {
       this.askDeleteUsers([id])
     },
 
-    askDeleteCheckedUsers () {
+    askDeleteCheckedUsers() {
       this.askDeleteUsers(this.checkedIds)
     },
 
-    askDeleteUsers (ids) {
+    askDeleteUsers(ids) {
       if (_.isFunction(this?.$refs?.confirmDialog?.openDialog)) {
-        const user = ids.length === 1
-          ? this.users.find(user => {
-            return user.id === ids[0]
-          })
-          : null
+        const user =
+          ids.length === 1
+            ? this.users.find((user) => {
+                return user.id === ids[0]
+              })
+            : null
         const title = user ? user.publicId : ''
         this.$refs.confirmDialog.openDialog({
           title,
           message: this.$tc('ADMINPANELWEBCLIENT.CONFIRM_DELETE_USER_PLURAL', ids.length),
-          okHandler: this.deleteUsers.bind(this, ids)
+          okHandler: this.deleteUsers.bind(this, ids),
         })
       }
     },
 
-    deleteUsers (ids) {
+    deleteUsers(ids) {
       this.deletingIds = ids
       this.loadingUsers = true
-      webApi.sendRequest({
-        moduleName: 'Core',
-        methodName: 'DeleteUsers',
-        parameters: {
-          IdList: ids,
-          DeletionConfirmedByAdmin: true
-        },
-      }).then(result => {
-        this.deletingIds = []
-        this.loadingUsers = false
-        if (result === true) {
-          notification.showReport(this.$tc('ADMINPANELWEBCLIENT.REPORT_DELETE_ENTITIES_USER_PLURAL', ids.length))
-          const isSelectedUserRemoved = ids.indexOf(this.selectedUserId) !== -1
-          const selectedPage = this.$refs?.userList?.selectedPage || 1
-          const shouldChangePage = this.users.length === ids.length && selectedPage > 1
-          if (shouldChangePage && _.isFunction(this.$refs?.userList?.decreasePage)) {
-            this.$refs.userList.decreasePage()
-          } else if (isSelectedUserRemoved) {
-            this.route()
-            this.populate()
-          } else {
-            this.populate()
+      webApi
+        .sendRequest({
+          moduleName: 'Core',
+          methodName: 'DeleteUsers',
+          parameters: {
+            IdList: ids,
+            DeletionConfirmedByAdmin: true,
+          },
+        })
+        .then(
+          (result) => {
+            this.deletingIds = []
+            this.loadingUsers = false
+            if (result === true) {
+              notification.showReport(this.$tc('ADMINPANELWEBCLIENT.REPORT_DELETE_ENTITIES_USER_PLURAL', ids.length))
+              const isSelectedUserRemoved = ids.indexOf(this.selectedUserId) !== -1
+              const selectedPage = this.$refs?.userList?.selectedPage || 1
+              const shouldChangePage = this.users.length === ids.length && selectedPage > 1
+              if (shouldChangePage && _.isFunction(this.$refs?.userList?.decreasePage)) {
+                this.$refs.userList.decreasePage()
+              } else if (isSelectedUserRemoved) {
+                this.route()
+                this.populate()
+              } else {
+                this.populate()
+              }
+            } else {
+              notification.showError(this.$tc('ADMINPANELWEBCLIENT.ERROR_DELETE_ENTITIES_USER_PLURAL', ids.length))
+            }
+          },
+          (error) => {
+            this.deletingIds = []
+            this.loadingUsers = false
+            notification.showError(
+              errors.getTextFromResponse(
+                error,
+                this.$tc('ADMINPANELWEBCLIENT.ERROR_DELETE_ENTITIES_USER_PLURAL', ids.length)
+              )
+            )
           }
-        } else {
-          notification.showError(this.$tc('ADMINPANELWEBCLIENT.ERROR_DELETE_ENTITIES_USER_PLURAL', ids.length))
-        }
-      }, error => {
-        this.deletingIds = []
-        this.loadingUsers = false
-        notification.showError(errors.getTextFromResponse(error, this.$tc('ADMINPANELWEBCLIENT.ERROR_DELETE_ENTITIES_USER_PLURAL', ids.length)))
-      })
+        )
     },
 
-    addUsersToGroup (groupId) {
+    addUsersToGroup(groupId) {
       if (this.checkedOrSelectedUsersIds.length > 0) {
         this.$store.dispatch('groups/addUsersToGroup', {
           tenantId: this.currentTenantId,
           groupId,
-          usersIds: this.checkedOrSelectedUsersIds
+          usersIds: this.checkedOrSelectedUsersIds,
         })
       }
     },
 
-    async removeFromGroup () {
+    async removeFromGroup() {
       if (this.checkedOrSelectedUsersIds.length > 0) {
         await this.$store.dispatch('groups/removeUsersFromGroup', {
           tenantId: this.currentTenantId,
           groupId: this.selectedGroupId,
           usersIds: this.checkedOrSelectedUsersIds,
-          callback: this.populate.bind(this)
+          callback: this.populate.bind(this),
         })
       }
     },

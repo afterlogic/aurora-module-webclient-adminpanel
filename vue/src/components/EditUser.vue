@@ -44,18 +44,16 @@
               />
             </div>
           </div>
-          <template>
-            <component
-              v-for="component in otherDataComponents"
-              :key="component.name"
-              v-bind:is="component"
-              ref="otherDataComponents"
-              :currentTenantId="currentTenantId"
-              :user="user"
-              :createMode="createMode"
-              @save="handleSave"
-            />
-          </template>
+          <component
+            v-for="component in otherDataComponents"
+            :key="component.name"
+            v-bind:is="component"
+            ref="otherDataComponents"
+            :currentTenantId="currentTenantId"
+            :user="user"
+            :createMode="createMode"
+            @save="handleSave"
+          />
           <div class="row q-mt-md" v-if="!createMode && allTenantGroups.length > 0 && isUserSuperAdmin">
             <div class="col-2 q-mt-sm" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_GROUPS'"></div>
             <div class="col-10">

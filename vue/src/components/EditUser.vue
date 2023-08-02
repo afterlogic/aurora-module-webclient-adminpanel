@@ -241,8 +241,11 @@ export default {
 
   watch: {
     $route(to, from) {
-      this.parseRoute()
-      this.getUserMainDataComponent()
+      // TODO
+      if (to.path !== '/users/create') {
+        this.parseRoute()
+        this.getUserMainDataComponent()
+      }
     },
 
     'user.groups'() {

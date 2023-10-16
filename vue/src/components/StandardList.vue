@@ -57,11 +57,11 @@
             <q-item-section side v-if="item.rightText !== undefined">
               <q-item-label lines="1">{{ item.rightText }}</q-item-label>
             </q-item-section>
-            <slot
-              name="right-icon"
-              v-if="item.showRightIcon"
-              :color="selectedItem === item.id ? 'white' : 'black'"
-            ></slot>
+            <template v-for="label in item.labels" :key="label.title">
+              <q-item-section side :color="selectedItem === item.id ? 'white' : 'black'">
+                <span :class="label.cssClass">{{ label.title }}</span>
+              </q-item-section>
+            </template>
           </q-item>
           <q-separator />
         </div>

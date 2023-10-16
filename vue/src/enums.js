@@ -19,4 +19,5 @@ export default {
   getUserRoles () {
     return enums.UserRoles
   },
+
 }

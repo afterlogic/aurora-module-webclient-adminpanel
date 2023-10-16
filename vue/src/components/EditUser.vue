@@ -511,6 +511,7 @@ export default {
         cache.getUser(parameters.TenantId, parameters.UserId).then(({ user }) => {
           user.update(parameters, this.allTenantGroups)
           this.populate()
+          this.$emit('user-updated', user.Id)
         })
         notification.showReport(this.$t('ADMINPANELWEBCLIENT.REPORT_UPDATE_ENTITY_USER'))
       } else {

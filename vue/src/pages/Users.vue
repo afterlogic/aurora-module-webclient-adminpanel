@@ -88,13 +88,7 @@
             ref="userList"
             @route="route"
             @check="afterCheck"
-          >
-            <template v-slot:right-icon>
-              <q-item-section side>
-                <span class="me">{{ $t('ADMINPANELWEBCLIENT.LABEL_ITS_ME') }}</span>
-              </q-item-section>
-            </template>
-          </standard-list>
+          />
         </div>
       </template>
       <template v-slot:after>
@@ -138,6 +132,7 @@
             <router-view
               @no-user-found="handleNoUserFound"
               @user-created="handleCreateUser"
+              @user-updated="handleUpdateUser"
               @cancel-create="route"
               @delete-user="askDeleteUser"
               :deletingIds="deletingIds"
@@ -149,6 +144,7 @@
           v-if="!showTabs"
           @no-user-found="handleNoUserFound"
           @user-created="handleCreateUser"
+          @user-updated="handleUpdateUser"
           @cancel-create="route"
           @delete-user="askDeleteUser"
           :deletingIds="deletingIds"
@@ -311,12 +307,28 @@ export default {
 
     users() {
       const userPublicId = this.$store.getters['user/getUserPublicId']
+      const UserRoles = enums.getUserRoles()
+
       this.userItems = this.users.map((user) => {
+        const labels = []
+        if (user.publicId === userPublicId) {
+          labels.push({
+            title: this.$t('ADMINPANELWEBCLIENT.LABEL_ITS_ME'),
+            cssClass: 'me',
+          })
+        }
+        if (user.role === UserRoles.TenantAdmin) {
+          labels.push({
+            title: this.$t('ADMINPANELWEBCLIENT.LABEL_ITS_ADMIN'),
+            cssClass: 'admin',
+          })
+        }
+
         return {
           id: user.id,
           title: user.publicId,
           checked: false,
-          showRightIcon: user.publicId === userPublicId,
+          labels,
         }
       })
     },
@@ -416,12 +428,7 @@ export default {
             this.users = users
             this.totalCount = totalCount
             this.loadingUsers = false
-            if (
-              this.justCreatedId &&
-              users.find((user) => {
-                return user.id === this.justCreatedId
-              })
-            ) {
+            if (this.justCreatedId && users.find(user => user.id === this.justCreatedId)) {
               this.route(this.justCreatedId)
               this.justCreatedId = 0
             }
@@ -471,6 +478,10 @@ export default {
     handleCreateUser(id) {
       this.justCreatedId = id
       this.route()
+      this.populate()
+    },
+
+    handleUpdateUser(id) {
       this.populate()
     },
 

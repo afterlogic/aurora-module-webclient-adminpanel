@@ -240,12 +240,8 @@ export default {
   },
 
   watch: {
-    $route(to, from) {
-      // TODO
-      if (to.path !== '/users/create') {
-        this.parseRoute()
-        this.getUserMainDataComponent()
-      }
+    $route() {
+      this.parseRoute()
     },
 
     'user.groups'() {
@@ -285,6 +281,9 @@ export default {
       this.otherDataComponents = await modulesManager.getUserOtherDataComponents()
     },
     parseRoute() {
+      if (this.$route.path === '/users' || this.$route.path === '/users/') {
+        return
+      }
       if (this.createMode) {
         const user = new UserModel(this.currentTenantId, {})
         this.fillUp(user)
@@ -295,6 +294,7 @@ export default {
             id: userId,
           }
           this.populate()
+          this.getUserMainDataComponent()
         }
       }
     },

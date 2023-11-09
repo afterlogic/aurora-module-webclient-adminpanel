@@ -284,7 +284,8 @@ export default {
       if (this.$route.path === '/users' || this.$route.path === '/users/') {
         return
       }
-      if (this.createMode) {
+      // TODO
+      if (this.createMode || this.$route.path === '/users/create') {
         const user = new UserModel(this.currentTenantId, {})
         this.fillUp(user)
       } else {

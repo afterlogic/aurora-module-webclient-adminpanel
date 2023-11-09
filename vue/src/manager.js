@@ -17,6 +17,10 @@ export default {
   init (appData) {
     convertLocalstorageData()
     settings.init(appData)
+    const siteName = settings?.getCommonSettingData()?.siteName
+    if (siteName) {
+      document.title = siteName
+    }
   },
 
   getPages () {

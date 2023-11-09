@@ -2,7 +2,7 @@
   "name": "admin-panel-vue-webclient",
   "version": "1.0.0",
   "description": "Admin panel",
-  "productName": "Afterlogic platform admin panel module",
+  "productName": "Afterlogic Aurora adminpanel",
   "author": "Afterlogic",
   "private": true,
   "scripts": {

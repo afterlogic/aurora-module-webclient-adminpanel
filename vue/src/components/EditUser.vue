@@ -208,6 +208,10 @@ export default {
   },
 
   computed: {
+    createModeForEditUser() {
+      const createIndex = this.$route.path.indexOf('/create')
+      return createIndex !== -1 && createIndex === this.$route.path.length - 7
+    },
     userCreatedAtString() {
       return this.user?.completeData?.CreatedAt ? moment(this.user?.completeData?.CreatedAt).format('L HH:mm') : null
     },
@@ -285,7 +289,7 @@ export default {
         return
       }
       // TODO
-      if (this.createMode || this.$route.path === '/users/create') {
+      if (this.createMode || this.createModeForEditUser) {
         const user = new UserModel(this.currentTenantId, {})
         this.fillUp(user)
       } else {

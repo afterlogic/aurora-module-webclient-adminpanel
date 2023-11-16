@@ -18,7 +18,7 @@ import settings from 'src/settings'
  * with the Router instance.
  */
 
-export default route(function (/* { store, ssrContext } */) {
+export default route(async function (/* { store, ssrContext } */) {
   // const Router = new VueRouter({
   //   scrollBehavior: () => ({ x: 0, y: 0 }),
   //   routes,
@@ -51,61 +51,59 @@ export default route(function (/* { store, ssrContext } */) {
   let isAppLoadError = false
   let isFirstLogin = true
 
-  Router.beforeEach((to, from, next) => {
+  Router.beforeEach(async (to, from, next) => {
     if (isAppLoadError && to.path === '/app-not-loaded') {
       next()
       return
     }
-    core.init().then(
-      () => {
-        if (!routesAdded) {
-          modulesManager.getRoutes().forEach((route) => {
-            const { name, path, component, children } = route
-            const routeData = { name, path, component }
-            if (children) {
-              routeData.children = children
-            }
-            Router.addRoute(name, routeData)
-          })
-          routesAdded = true
-          next(to.path)
-          return
-        }
-        // upon first login when we are logged in
-        if (isFirstLogin && store.getters['user/isUserSuperAdminOrTenantAdmin']) {
-          const { name, path, component, children } = modulesManager.getUserRoutes()
+    try {
+      await core.init()
+      if (!routesAdded) {
+        modulesManager.getRoutes().forEach((route) => {
+          const { name, path, component, children } = route
           const routeData = { name, path, component }
           if (children) {
             routeData.children = children
           }
-          // add user routes
           Router.addRoute(name, routeData)
-          if (settings.getEnableMultiTenant()) {
-            const { name, path, component, children } = modulesManager.getTenantRoutes()
-            const routeData = { name, path, component }
-            if (children) {
-              routeData.children = children
-            }
-            // add tenant routes
-            Router.addRoute(name, routeData)
-          }
-          isFirstLogin = false
-          next(to.path)
-          return
-        }
-        const correctedPath = modulesManager.checkRouteExistsAndAllowed(to.matched, to.path)
-        if (to.path !== correctedPath) {
-          next(correctedPath)
-          return
-        }
-        next()
-      },
-      (error) => {
-        console.log('core.init reject', error)
-        isAppLoadError = true
-        next('/app-not-loaded')
+        })
+        routesAdded = true
+        next(to.path)
+        return
       }
-    )
+      // upon first login when we are logged in
+      if (isFirstLogin && store.getters['user/isUserSuperAdminOrTenantAdmin']) {
+        const { name, path, component, children } = modulesManager.getUserRoutes()
+        const routeData = { name, path, component }
+        if (children) {
+          routeData.children = children
+        }
+        // add user routes
+        Router.addRoute(name, routeData)
+        if (settings.getEnableMultiTenant()) {
+          const { name, path, component, children } = modulesManager.getTenantRoutes()
+          const routeData = { name, path, component }
+          if (children) {
+            routeData.children = children
+          }
+          // add tenant routes
+          Router.addRoute(name, routeData)
+        }
+        isFirstLogin = false
+        next(to.path)
+        return
+      }
+      const correctedPath = modulesManager.checkRouteExistsAndAllowed(to.matched, to.path)
+      if (to.path !== correctedPath) {
+        next(correctedPath)
+        return
+      }
+      next()
+    } catch (error) {
+      console.log('core.init reject', error)
+      isAppLoadError = true
+      next('/app-not-loaded')
+    }
   })
 
   return Router

@@ -12,7 +12,7 @@ let availableModules = []
 
 let allModules = null
 let allModulesNames = []
-let allPages = null
+let allRoutes = null
 
 let tenantEditDataComponent = null
 
@@ -88,30 +88,30 @@ export default {
     return allModulesNames.indexOf(moduleName) !== -1 || availableBackendModules.indexOf(moduleName) !== -1
   },
 
-  getPages () {
-    if (allPages === null && allModules !== null) {
-      allPages = []
+  getRoutes () {
+    if (allRoutes === null && allModules !== null) {
+      allRoutes = []
       allModules.forEach(module => {
-        const modulePages = _.isFunction(module.getPages) && module.getPages()
-        if (_.isArray(modulePages)) {
-          allPages = allPages.concat(modulePages)
+        const moduleRoutes = _.isFunction(module.getRoutes) && module.getRoutes()
+        if (_.isArray(moduleRoutes)) {
+          allRoutes = allRoutes.concat(moduleRoutes)
         }
       })
     }
 
-    return allPages === null ? [] : allPages
+    return allRoutes === null ? [] : allRoutes
   },
 
-  getUserPages () {
-    let pages = {}
+  getUserRoutes () {
+    let routes = {}
     allModules.forEach(module => {
-      if (_.isFunction(module.getUserPages)) {
-        pages = module.getUserPages()
+      if (_.isFunction(module.getUserRoutes)) {
+        routes = module.getUserRoutes()
       }
     })
-    allPages = allPages.concat(pages)
+    allRoutes = allRoutes.concat(routes)
 
-    return pages
+    return routes
   },
 
   getTenantRoutes () {
@@ -121,32 +121,32 @@ export default {
         routes = module.getTenantRoutes()
       }
     })
-    allPages = allPages.concat(routes)
+    allRoutes = allRoutes.concat(routes)
 
     return routes
   },
 
-  getPagesForUserRole (userRole) {
-    if (allPages !== null) {
-      const pagesOrder = settings.getTabsBarOrder(userRole)
-      const userRolePages = allPages.filter(page => _.indexOf(page.pageUserRoles, userRole) !== -1)
-      return _.sortBy(userRolePages, (page) => {
-        const index = _.indexOf(pagesOrder, page.name)
-        return index !== -1 ? index : pagesOrder.length
+  getRoutesForUserRole (userRole) {
+    if (allRoutes !== null) {
+      const routesOrder = settings.getTabsBarOrder(userRole)
+      const userRoleRoutes = allRoutes.filter(route => _.indexOf(route.routeUserRoles, userRole) !== -1)
+      return _.sortBy(userRoleRoutes, (route) => {
+        const index = _.indexOf(routesOrder, route.name)
+        return index !== -1 ? index : routesOrder.length
       })
     }
     return []
   },
 
-  getDefaultPageForUser () {
+  getDefaultRouteForUser () {
     const
       userRole = store.getters['user/getUserRole'],
-      pages = this.getPagesForUserRole(userRole)
-    return pages.length ? pages[0] : null
+      routes = this.getRoutesForUserRole(userRole)
+    return routes.length ? routes[0] : null
   },
 
   /**
-   * Path is corrected depending on which page is allowed for user (if someone is authenticated) or anonymous (if no one is authenticated)
+   * Path is corrected depending on which route is allowed for user (if someone is authenticated) or anonymous (if no one is authenticated)
    * @param matchedRoutes
    * @param toPath
    * @returns {string}
@@ -154,24 +154,24 @@ export default {
   checkRouteExistsAndAllowed (matchedRoutes, toPath = null) {
     const
       userRole = store.getters['user/getUserRole'],
-      pages = this.getPagesForUserRole(userRole)
-    if (pages.length === 0) {
+      routes = this.getRoutesForUserRole(userRole)
+    if (routes.length === 0) {
       return toPath || '/'
     }
     const matchedRouteName = _.isArray(matchedRoutes) && matchedRoutes.length > 0 ? matchedRoutes[0].name : null
-    let page = null
+    let route = null
     if (matchedRouteName !== null) {
-      page = pages.find(page => page.name === matchedRouteName) || null
+      route = routes.find(route => route.name === matchedRouteName) || null
     }
-    if (page === null) {
-      page = this.getDefaultPageForUser()
+    if (route === null) {
+      route = this.getDefaultRouteForUser()
     }
-    if (page === null) {
+    if (route === null) {
       return '/'
-    } else if (page.name === matchedRouteName) {
-      return toPath || page.path
+    } else if (route.name === matchedRouteName) {
+      return toPath || route.path
     } else {
-      return page.path
+      return route.path
     }
   },
 

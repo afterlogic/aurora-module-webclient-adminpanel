@@ -2,22 +2,22 @@
   <q-layout view="hHh LpR lfr">
     <q-header>
       <q-tabs class="q-py-sm" v-bind:class="getTabsBarClass()" no-caps align="left" indicator-color="transparent">
-        <template v-for="page in pages">
+        <template v-for="route in routes">
           <q-route-tab
-            :key="page.name"
-            :to="page.path"
+            :key="route.name"
+            :to="route.path"
             :ripple="false"
             class="q-px-none"
-            v-if="page.name !== 'tenants'"
+            v-if="route.name !== 'tenants'"
           >
-            <div class="q-px-md tab-label">{{ $t(page.pageTitle) }}</div>
+            <div class="q-px-md tab-label">{{ $t(route.routeTitle) }}</div>
           </q-route-tab>
           <q-route-tab
-            :key="page.name"
+            :key="route.name"
             to="/tenants"
             :ripple="false"
             class="q-px-none"
-            v-if="page.name === 'tenants'"
+            v-if="route.name === 'tenants'"
           >
             <div class="q-px-md tab-label">
               <span v-t="'ADMINPANELWEBCLIENT.HEADING_TENANTS_SETTINGS_TABNAME'"></span>
@@ -25,7 +25,7 @@
             </div>
           </q-route-tab>
           <q-btn-dropdown
-            :key="page.name + '_btn'"
+            :key="route.name + '_btn'"
             no-icon-animation
             cover
             auto-close
@@ -34,7 +34,7 @@
             dense
             :ripple="false"
             @click.stop
-            v-if="page.name === 'tenants' && tenantOptions.length > 1"
+            v-if="route.name === 'tenants' && tenantOptions.length > 1"
             :label="selectedTenantName"
             class="q-px-none text-weight-regular no-hover tenants-dropdown"
           >
@@ -73,7 +73,7 @@ export default {
 
   data() {
     return {
-      pages: [],
+      routes: [],
 
       selectedTenantId: null,
 
@@ -124,7 +124,7 @@ export default {
     this.$store.dispatch('tenants/requestTenants')
 
     const userRole = this.$store.getters['user/getUserRole']
-    this.pages = modulesManager.getPagesForUserRole(userRole)
+    this.routes = modulesManager.getRoutesForUserRole(userRole)
   },
 
   methods: {

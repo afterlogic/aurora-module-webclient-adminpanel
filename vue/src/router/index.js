@@ -59,8 +59,8 @@ export default route(function (/* { store, ssrContext } */) {
     core.init().then(
       () => {
         if (!routesAdded) {
-          modulesManager.getPages().forEach((page) => {
-            const { name, path, component, children } = page
+          modulesManager.getRoutes().forEach((route) => {
+            const { name, path, component, children } = route
             const routeData = { name, path, component }
             if (children) {
               routeData.children = children
@@ -73,7 +73,7 @@ export default route(function (/* { store, ssrContext } */) {
         }
         // upon first login when we are logged in
         if (isFirstLogin && store.getters['user/isUserSuperAdminOrTenantAdmin']) {
-          const { name, path, component, children } = modulesManager.getUserPages()
+          const { name, path, component, children } = modulesManager.getUserRoutes()
           const routeData = { name, path, component }
           if (children) {
             routeData.children = children

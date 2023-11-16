@@ -27,45 +27,26 @@ export default {
     const UserRoles = enums.getUserRoles()
     const pages = [
       {
-        pageName: 'login',
-        pagePath: '/',
-        pageComponent: () => import('pages/Login.vue'),
+        name: 'login',
+        path: '/',
+        component: () => import('pages/Login.vue'),
         pageUserRoles: [UserRoles.Anonymous],
       },
       {
-        pageName: 'system',
-        pagePath: '/system',
-        pageComponent: () => import('pages/System.vue'),
-        pageChildren: routesManager.getRouteChildren('System'),
+        name: 'system',
+        path: '/system',
+        component: () => import('pages/System.vue'),
+        children: routesManager.getRouteChildren('System'),
         pageUserRoles: [UserRoles.SuperAdmin],
         pageTitle: 'ADMINPANELWEBCLIENT.HEADING_SYSTEM_SETTINGS_TABNAME',
       },
     ]
-    if (settings.getEnableMultiTenant()) {
-      pages.push({
-        pageName: 'tenants',
-        pagePath: '/tenants',
-        pageComponent: () => import('pages/Tenants.vue'),
-        pageChildren: [
-          { path: 'id/:id', component: EditTenant },
-          { path: 'create', component: EditTenant },
-          { path: 'search/:search', component: Empty },
-          { path: 'search/:search/id/:id', component: EditTenant },
-          { path: 'page/:page', component: Empty },
-          { path: 'page/:page/id/:id', component: EditTenant },
-          { path: 'search/:search/page/:page', component: Empty },
-          { path: 'search/:search/page/:page/id/:id', component: EditTenant },
-        ].concat(routesManager.getRouteChildren('Tenant')),
-        pageUserRoles: [UserRoles.SuperAdmin, UserRoles.TenantAdmin],
-        pageTitle: 'ADMINPANELWEBCLIENT.HEADING_TENANTS_SETTINGS_TABNAME',
-      })
-    }
     if (settings.getAllowGroups()) {
       pages.push({
-        pageName: 'groups',
-        pagePath: '/groups',
-        pageComponent: () => import('pages/Groups.vue'),
-        pageChildren: [
+        name: 'groups',
+        path: '/groups',
+        component: () => import('pages/Groups.vue'),
+        children: [
           { path: 'id/:id', component: EditGroup },
           { path: 'create', component: EditGroup },
           { path: 'search/:search', component: Empty },
@@ -75,19 +56,50 @@ export default {
           { path: 'search/:search/page/:page', component: Empty },
           { path: 'search/:search/page/:page/id/:id', component: EditGroup },
         ],
+        // the rest of the properties are custom
         pageUserRoles: [UserRoles.SuperAdmin],
         pageTitle: 'ADMINPANELWEBCLIENT.HEADING_GROUPS_SETTINGS_TABNAME',
       })
     }
-    pages.push({
-      pageName: 'users',
-      pagePath: '/users',
-      pageComponent: () => import('pages/Users.vue'),
-      pageChildren: routesManager.getAllUserRoutes(),
+
+    return pages
+  },
+
+  getUserPages () {
+    const UserRoles = enums.getUserRoles()
+
+    return {
+      name: 'users',
+      path: '/users',
+      component: () => import('pages/Users.vue'),
+      children: routesManager.getAllUserRoutes(),
+      // the rest of the properties are custom
       pageUserRoles: [UserRoles.SuperAdmin, UserRoles.TenantAdmin],
       pageTitle: 'ADMINPANELWEBCLIENT.HEADING_USERS_SETTINGS_TABNAME',
-    })
-    return pages
+    }
+  },
+
+  getTenantRoutes () {
+    const UserRoles = enums.getUserRoles()
+
+    return {
+      name: 'tenants',
+      path: '/tenants',
+      component: () => import('pages/Tenants.vue'),
+      children: [
+        { path: 'id/:id', component: EditTenant },
+        { path: 'create', component: EditTenant },
+        { path: 'search/:search', component: Empty },
+        { path: 'search/:search/id/:id', component: EditTenant },
+        { path: 'page/:page', component: Empty },
+        { path: 'page/:page/id/:id', component: EditTenant },
+        { path: 'search/:search/page/:page', component: Empty },
+        { path: 'search/:search/page/:page/id/:id', component: EditTenant },
+      ].concat(routesManager.getRouteChildren('Tenant')),
+      // the rest of the properties are custom
+      pageUserRoles: [UserRoles.SuperAdmin, UserRoles.TenantAdmin],
+      pageTitle: 'ADMINPANELWEBCLIENT.HEADING_TENANTS_SETTINGS_TABNAME',
+    }
   },
 
   getAdminSystemTabs () {

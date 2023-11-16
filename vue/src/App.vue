@@ -79,7 +79,7 @@ export default defineComponent({
       // const currentRoute = this.$route
       const currentPath = currentRoute?.path
       const matchedRoutes = types.pArray(currentRoute?.matched)
-      const correctedPath = modulesManager.correctPathForUser(matchedRoutes)
+      const correctedPath = modulesManager.checkRouteExistsAndAllowed(matchedRoutes)
       if (matchedRoutes.length > 0 && currentPath !== correctedPath) {
         this.$router.push(correctedPath)
       }

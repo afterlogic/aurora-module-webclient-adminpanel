@@ -4,20 +4,20 @@
       <q-tabs class="q-py-sm" v-bind:class="getTabsBarClass()" no-caps align="left" indicator-color="transparent">
         <template v-for="page in pages">
           <q-route-tab
-            :key="page.pageName"
-            :to="page.pagePath"
+            :key="page.name"
+            :to="page.path"
             :ripple="false"
             class="q-px-none"
-            v-if="page.pageName !== 'tenants'"
+            v-if="page.name !== 'tenants'"
           >
             <div class="q-px-md tab-label">{{ $t(page.pageTitle) }}</div>
           </q-route-tab>
           <q-route-tab
-            :key="page.pageName"
+            :key="page.name"
             to="/tenants"
             :ripple="false"
             class="q-px-none"
-            v-if="page.pageName === 'tenants'"
+            v-if="page.name === 'tenants'"
           >
             <div class="q-px-md tab-label">
               <span v-t="'ADMINPANELWEBCLIENT.HEADING_TENANTS_SETTINGS_TABNAME'"></span>
@@ -25,7 +25,7 @@
             </div>
           </q-route-tab>
           <q-btn-dropdown
-            :key="page.pageName + '_btn'"
+            :key="page.name + '_btn'"
             no-icon-animation
             cover
             auto-close
@@ -34,7 +34,7 @@
             dense
             :ripple="false"
             @click.stop
-            v-if="page.pageName === 'tenants' && tenantOptions.length > 1"
+            v-if="page.name === 'tenants' && tenantOptions.length > 1"
             :label="selectedTenantName"
             class="q-px-none text-weight-regular no-hover tenants-dropdown"
           >

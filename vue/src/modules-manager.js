@@ -98,7 +98,32 @@ export default {
         }
       })
     }
+
     return allPages === null ? [] : allPages
+  },
+
+  getUserPages () {
+    let pages = {}
+    allModules.forEach(module => {
+      if (_.isFunction(module.getUserPages)) {
+        pages = module.getUserPages()
+      }
+    })
+    allPages = allPages.concat(pages)
+
+    return pages
+  },
+
+  getTenantRoutes () {
+    let routes = {}
+    allModules.forEach(module => {
+      if (_.isFunction(module.getTenantRoutes)) {
+        routes = module.getTenantRoutes()
+      }
+    })
+    allPages = allPages.concat(routes)
+
+    return routes
   },
 
   getPagesForUserRole (userRole) {
@@ -106,7 +131,7 @@ export default {
       const pagesOrder = settings.getTabsBarOrder(userRole)
       const userRolePages = allPages.filter(page => _.indexOf(page.pageUserRoles, userRole) !== -1)
       return _.sortBy(userRolePages, (page) => {
-        const index = _.indexOf(pagesOrder, page.pageName)
+        const index = _.indexOf(pagesOrder, page.name)
         return index !== -1 ? index : pagesOrder.length
       })
     }
@@ -126,28 +151,27 @@ export default {
    * @param toPath
    * @returns {string}
    */
-  correctPathForUser (matchedRoutes, toPath = null) {
+  checkRouteExistsAndAllowed (matchedRoutes, toPath = null) {
     const
       userRole = store.getters['user/getUserRole'],
       pages = this.getPagesForUserRole(userRole)
     if (pages.length === 0) {
       return toPath || '/'
     }
-
     const matchedRouteName = _.isArray(matchedRoutes) && matchedRoutes.length > 0 ? matchedRoutes[0].name : null
     let page = null
     if (matchedRouteName !== null) {
-      page = pages.find(page => page.pageName === matchedRouteName) || null
+      page = pages.find(page => page.name === matchedRouteName) || null
     }
     if (page === null) {
       page = this.getDefaultPageForUser()
     }
     if (page === null) {
       return '/'
-    } else if (page.pageName === matchedRouteName) {
-      return toPath || page.pagePath
+    } else if (page.name === matchedRouteName) {
+      return toPath || page.path
     } else {
-      return page.pagePath
+      return page.path
     }
   },
 

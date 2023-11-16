@@ -4,6 +4,8 @@ import routes from './routes'
 
 import core from 'src/core'
 import modulesManager from 'src/modules-manager'
+import store from 'src/store'
+import settings from 'src/settings'
 
 // Vue.use(VueRouter)
 
@@ -47,6 +49,8 @@ export default route(function (/* { store, ssrContext } */) {
 
   let routesAdded = false
   let isAppLoadError = false
+  let isFirstLogin = true
+
   Router.beforeEach((to, from, next) => {
     if (isAppLoadError && to.path === '/app-not-loaded') {
       next()
@@ -56,23 +60,40 @@ export default route(function (/* { store, ssrContext } */) {
       () => {
         if (!routesAdded) {
           modulesManager.getPages().forEach((page) => {
-            const routeData = {
-              name: page.pageName,
-              path: page.pagePath,
-              component: page.pageComponent,
-              // strict: page.pageStrict
+            const { name, path, component, children } = page
+            const routeData = { name, path, component }
+            if (children) {
+              routeData.children = children
             }
-            if (page.pageChildren) {
-              routeData.children = page.pageChildren
-            }
-            Router.addRoute(page.pageName, routeData)
+            Router.addRoute(name, routeData)
           })
           routesAdded = true
           next(to.path)
           return
         }
-
-        const correctedPath = modulesManager.correctPathForUser(to.matched, to.path)
+        // upon first login when we are logged in
+        if (isFirstLogin && store.getters['user/isUserSuperAdminOrTenantAdmin']) {
+          const { name, path, component, children } = modulesManager.getUserPages()
+          const routeData = { name, path, component }
+          if (children) {
+            routeData.children = children
+          }
+          // add user routes
+          Router.addRoute(name, routeData)
+          if (settings.getEnableMultiTenant()) {
+            const { name, path, component, children } = modulesManager.getTenantRoutes()
+            const routeData = { name, path, component }
+            if (children) {
+              routeData.children = children
+            }
+            // add tenant routes
+            Router.addRoute(name, routeData)
+          }
+          isFirstLogin = false
+          next(to.path)
+          return
+        }
+        const correctedPath = modulesManager.checkRouteExistsAndAllowed(to.matched, to.path)
         if (to.path !== correctedPath) {
           next(correctedPath)
           return

@@ -129,7 +129,7 @@ export default {
   getRoutesForUserRole (userRole) {
     if (allRoutes !== null) {
       const routesOrder = settings.getTabsBarOrder(userRole)
-      const userRoleRoutes = allRoutes.filter(route => _.indexOf(route.routeUserRoles, userRole) !== -1)
+      const userRoleRoutes = allRoutes.filter(route => _.indexOf(route.pageUserRoles, userRole) !== -1)
       return _.sortBy(userRoleRoutes, (route) => {
         const index = _.indexOf(routesOrder, route.name)
         return index !== -1 ? index : routesOrder.length

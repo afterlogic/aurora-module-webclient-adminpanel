@@ -10,7 +10,7 @@
             class="q-px-none"
             v-if="route.name !== 'tenants'"
           >
-            <div class="q-px-md tab-label">{{ $t(route.routeTitle) }}</div>
+            <div class="q-px-md tab-label">{{ $t(route.pageTitle) }}</div>
           </q-route-tab>
           <q-route-tab
             :key="route.name"

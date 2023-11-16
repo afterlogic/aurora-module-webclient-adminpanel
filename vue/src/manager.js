@@ -10,6 +10,7 @@ import EditGroup from 'components/EditGroup'
 import GroupFilterForUsers from 'src/components/GroupFilterForUsers'
 
 export default {
+  UserRoles: enums.getUserRoles(),
   moduleName: 'AdminPanelWebclient',
 
   requiredModules: [],
@@ -24,13 +25,12 @@ export default {
   },
 
   getRoutes () {
-    const UserRoles = enums.getUserRoles()
     const routes = [
       {
         name: 'login',
         path: '/',
         component: () => import('pages/Login.vue'),
-        routeUserRoles: [UserRoles.Anonymous],
+        pageUserRoles: [this.UserRoles.Anonymous],
       },
       {
         name: 'system',
@@ -38,8 +38,8 @@ export default {
         component: () => import('pages/System.vue'),
         children: routesManager.getRouteChildren('System'),
         // the rest of the properties are custom
-        routeUserRoles: [UserRoles.SuperAdmin],
-        routeTitle: 'ADMINPANELWEBCLIENT.HEADING_SYSTEM_SETTINGS_TABNAME',
+        pageUserRoles: [this.UserRoles.SuperAdmin],
+        pageTitle: 'ADMINPANELWEBCLIENT.HEADING_SYSTEM_SETTINGS_TABNAME',
       },
     ]
     if (settings.getAllowGroups()) {
@@ -58,8 +58,8 @@ export default {
           { path: 'search/:search/page/:page/id/:id', component: EditGroup },
         ],
         // the rest of the properties are custom
-        routeUserRoles: [UserRoles.SuperAdmin],
-        routeTitle: 'ADMINPANELWEBCLIENT.HEADING_GROUPS_SETTINGS_TABNAME',
+        pageUserRoles: [this.UserRoles.SuperAdmin],
+        pageTitle: 'ADMINPANELWEBCLIENT.HEADING_GROUPS_SETTINGS_TABNAME',
       })
     }
 
@@ -67,22 +67,18 @@ export default {
   },
 
   getUserRoutes () {
-    const UserRoles = enums.getUserRoles()
-
     return {
       name: 'users',
       path: '/users',
       component: () => import('pages/Users.vue'),
       children: routesManager.getAllUserRoutes(),
       // the rest of the properties are custom
-      routeUserRoles: [UserRoles.SuperAdmin, UserRoles.TenantAdmin],
-      routeTitle: 'ADMINPANELWEBCLIENT.HEADING_USERS_SETTINGS_TABNAME',
+      pageUserRoles: [this.UserRoles.SuperAdmin, this.UserRoles.TenantAdmin],
+      pageTitle: 'ADMINPANELWEBCLIENT.HEADING_USERS_SETTINGS_TABNAME',
     }
   },
 
   getTenantRoutes () {
-    const UserRoles = enums.getUserRoles()
-
     return {
       name: 'tenants',
       path: '/tenants',
@@ -98,8 +94,8 @@ export default {
         { path: 'search/:search/page/:page/id/:id', component: EditTenant },
       ].concat(routesManager.getRouteChildren('Tenant')),
       // the rest of the properties are custom
-      routeUserRoles: [UserRoles.SuperAdmin, UserRoles.TenantAdmin],
-      routeTitle: 'ADMINPANELWEBCLIENT.HEADING_TENANTS_SETTINGS_TABNAME',
+      pageUserRoles: [this.UserRoles.SuperAdmin, this.UserRoles.TenantAdmin],
+      pageTitle: 'ADMINPANELWEBCLIENT.HEADING_TENANTS_SETTINGS_TABNAME',
     }
   },
 

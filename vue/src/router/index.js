@@ -18,7 +18,7 @@ import settings from 'src/settings'
  * with the Router instance.
  */
 
-export default route(async function (/* { store, ssrContext } */) {
+export default route(function (/* { store, ssrContext } */) {
   // const Router = new VueRouter({
   //   scrollBehavior: () => ({ x: 0, y: 0 }),
   //   routes,

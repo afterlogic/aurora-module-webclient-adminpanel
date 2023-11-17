@@ -9,8 +9,9 @@ import EditTenant from 'components/EditTenant'
 import EditGroup from 'components/EditGroup'
 import GroupFilterForUsers from 'src/components/GroupFilterForUsers'
 
+const UserRoles = enums.getUserRoles()
+
 export default {
-  UserRoles: enums.getUserRoles(),
   moduleName: 'AdminPanelWebclient',
 
   requiredModules: [],
@@ -30,7 +31,7 @@ export default {
         name: 'login',
         path: '/',
         component: () => import('pages/Login.vue'),
-        pageUserRoles: [this.UserRoles.Anonymous],
+        pageUserRoles: [UserRoles.Anonymous],
       },
       {
         name: 'system',
@@ -38,7 +39,7 @@ export default {
         component: () => import('pages/System.vue'),
         children: routesManager.getRouteChildren('System'),
         // the rest of the properties are custom
-        pageUserRoles: [this.UserRoles.SuperAdmin],
+        pageUserRoles: [UserRoles.SuperAdmin],
         pageTitle: 'ADMINPANELWEBCLIENT.HEADING_SYSTEM_SETTINGS_TABNAME',
       },
     ]
@@ -58,7 +59,7 @@ export default {
           { path: 'search/:search/page/:page/id/:id', component: EditGroup },
         ],
         // the rest of the properties are custom
-        pageUserRoles: [this.UserRoles.SuperAdmin],
+        pageUserRoles: [UserRoles.SuperAdmin],
         pageTitle: 'ADMINPANELWEBCLIENT.HEADING_GROUPS_SETTINGS_TABNAME',
       })
     }
@@ -73,7 +74,7 @@ export default {
       component: () => import('pages/Users.vue'),
       children: routesManager.getAllUserRoutes(),
       // the rest of the properties are custom
-      pageUserRoles: [this.UserRoles.SuperAdmin, this.UserRoles.TenantAdmin],
+      pageUserRoles: [UserRoles.SuperAdmin, UserRoles.TenantAdmin],
       pageTitle: 'ADMINPANELWEBCLIENT.HEADING_USERS_SETTINGS_TABNAME',
     }
   },
@@ -94,7 +95,7 @@ export default {
         { path: 'search/:search/page/:page/id/:id', component: EditTenant },
       ].concat(routesManager.getRouteChildren('Tenant')),
       // the rest of the properties are custom
-      pageUserRoles: [this.UserRoles.SuperAdmin, this.UserRoles.TenantAdmin],
+      pageUserRoles: [UserRoles.SuperAdmin, UserRoles.TenantAdmin],
       pageTitle: 'ADMINPANELWEBCLIENT.HEADING_TENANTS_SETTINGS_TABNAME',
     }
   },

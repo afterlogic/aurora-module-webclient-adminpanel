@@ -24,7 +24,7 @@ export default {
         Module: moduleName,
       }
 
-      eventBus.$emit('webApi::Request::before', parameters)
+      eventBus.$emit('webApi::Request', { moduleName, methodName, parameters })
 
       const postData = {
         Module: moduleName,

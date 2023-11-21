@@ -529,7 +529,6 @@ export default {
           methodName: 'DeleteUsers',
           parameters: {
             IdList: ids,
-            DeletionConfirmedByAdmin: true,
           },
         })
         .then(

@@ -19,8 +19,7 @@ function prepareStores() {
     const paths = storesPaths.join('\n')
     const names = storesNames.join('\n')
     const storesContent =
-      `
-import Vuex from 'vuex'
+`import Vuex from 'vuex'
 
 import user from './user'
 import main from './main'

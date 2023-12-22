@@ -85,6 +85,10 @@ module.exports = configure(function (ctx) {
           .type('javascript/auto')
           .use('i18n')
           .loader('@intlify/vue-i18n-loader')
+        chain.resolve.modules
+          .clear()
+          .add(path.resolve(__dirname, 'node_modules'))
+          .add(path.resolve(__dirname, 'node_modules/@quasar/app-webpack/node_modules'))
       },
     },
 

@@ -20,6 +20,7 @@
     "axios": "^1.2.1",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.5",
+    "iniparser": "^1.0.5",
     "moment": "^2.29.4",
     "quasar": "^2.6.0",
     "tiny-emitter": "^2.1.0",

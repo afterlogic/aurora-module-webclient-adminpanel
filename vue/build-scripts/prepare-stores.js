@@ -16,7 +16,7 @@ function prepareStores() {
 
   const dir = './src/store'
   if (fs.existsSync(dir)) {
-    const paths = storesPaths.join('\n')
+    const paths = storesPaths.length ? storesPaths.join('\n') + '\n' : ''
     const names = storesNames.join('\n')
     const storesContent =
 `import Vuex from 'vuex'
@@ -26,7 +26,6 @@ import main from './main'
 import tenants from './tenants'
 import groups from './groups'
 ${paths}
-
 export default new Vuex.Store({
   modules: {
     main,

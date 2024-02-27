@@ -63,7 +63,7 @@ export default {
               response: response.data,
             })
             const result = response.data.Result
-            if (!result) {
+            if (result === undefined) {
               if (response.data.ErrorCode || response.data.ErrorMessage || response.data.SubscriptionsResult) {
                 if (
                   store.getters['user/isUserSuperAdminOrTenantAdmin'] &&

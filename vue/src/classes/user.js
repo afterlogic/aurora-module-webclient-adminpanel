@@ -17,6 +17,7 @@ class UserModel {
     this.role = typesUtils.pEnum(serverData?.Role, UserRoles, UserRoles.Anonymous)
     this.uuid = typesUtils.pString(serverData?.UUID)
     this.quotaBytes = typesUtils.pInt(serverData?.QuotaBytes)
+    this.note = typesUtils.pString(serverData?.Note)
 
     this.groups = typesUtils.pArray(serverData.Groups).map(groupData => new GroupModel(groupData))
 
@@ -42,6 +43,10 @@ class UserModel {
 
     if (data?.QuotaBytes) {
       this.quotaBytes = typesUtils.pInt(data?.QuotaBytes)
+    }
+
+    if (data?.Note) {
+      this.note = typesUtils.pString(data?.Note)
     }
 
     if (_.isArray(allTenantGroups)) {

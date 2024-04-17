@@ -15,6 +15,12 @@
             :createMode="createMode"
             @save="handleSave"
           />
+          <div class="row q-mb-md">
+            <div class="col-2" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_NOTE'" />
+            <div class="col-5 text-weight-medium">
+              <q-input outlined dense bg-color="white" autogrow v-model="note" @keyup.enter.exact="save"/>
+            </div>
+          </div>
           <div class="row q-mb-md" v-if="userCreatedAtString">
             <div class="col-2" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_CREATED'" />
             <div class="col-5 text-weight-medium">
@@ -198,6 +204,7 @@ export default {
       publicId: '',
       isTenantAdmin: false,
       writeSeparateLog: false,
+      note: '',
 
       selectedGroupOptions: [],
       groupOptions: [],
@@ -308,6 +315,7 @@ export default {
       this.publicId = ''
       this.isTenantAdmin = false
       this.writeSeparateLog = false
+      this.note = ''
     },
 
     fillUp(user) {
@@ -315,6 +323,7 @@ export default {
       this.publicId = user.publicId
       this.isTenantAdmin = user.role === UserRoles.TenantAdmin
       this.writeSeparateLog = user.writeSeparateLog
+      this.note = user.note
       this.selectedGroupOptions = user.groups.map((group) => {
         return {
           label: group.name,
@@ -387,6 +396,7 @@ export default {
         hasOtherDataChanges() ||
         this.isTenantAdmin !== (this.user?.role === UserRoles.TenantAdmin) ||
         this.writeSeparateLog !== this.user?.writeSeparateLog ||
+        this.note !== this.user?.note ||
         this.hasGroupChanges()
       )
     },
@@ -415,6 +425,7 @@ export default {
       }
       this.isTenantAdmin = this.user?.role === UserRoles.TenantAdmin
       this.writeSeparateLog = this.user?.writeSeparateLog
+      this.note = this.user?.note
     },
 
     isDataValid() {
@@ -465,6 +476,7 @@ export default {
                 : UserRoles.NormalUser
               : UserRoles.NormalUser,
             WriteSeparateLog: this.writeSeparateLog,
+            Note: this.note,
             Forced: true,
             GroupIds: isUserSuperAdmin ? this.selectedGroupOptions.map((option) => option.value) : null,
           },

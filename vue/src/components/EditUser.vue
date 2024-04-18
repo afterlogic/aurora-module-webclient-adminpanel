@@ -21,6 +21,12 @@
               <q-input outlined dense bg-color="white" autogrow v-model="note" @keyup.enter.exact="save"/>
             </div>
           </div>
+          <div class="row q-mb-md">
+            <div class="col-2"></div>
+            <div class="col-5">
+              <q-checkbox dense v-model="isDisabled" :label="$t('ADMINPANELWEBCLIENT.ACTION_DEACTIVATE')" />
+            </div>
+          </div>
           <div class="row q-mb-md" v-if="userCreatedAtString">
             <div class="col-2" v-t="'ADMINPANELWEBCLIENT.LABEL_USER_CREATED'" />
             <div class="col-5 text-weight-medium">
@@ -202,6 +208,7 @@ export default {
 
       user: null,
       publicId: '',
+      isDisabled: false,
       isTenantAdmin: false,
       writeSeparateLog: false,
       note: '',
@@ -321,6 +328,7 @@ export default {
     fillUp(user) {
       this.user = user
       this.publicId = user.publicId
+      this.isDisabled = user.disabled
       this.isTenantAdmin = user.role === UserRoles.TenantAdmin
       this.writeSeparateLog = user.writeSeparateLog
       this.note = user.note
@@ -394,6 +402,7 @@ export default {
       return (
         hasMainDataChanges ||
         hasOtherDataChanges() ||
+        this.isDisabled !== this.user?.disabled ||
         this.isTenantAdmin !== (this.user?.role === UserRoles.TenantAdmin) ||
         this.writeSeparateLog !== this.user?.writeSeparateLog ||
         this.note !== this.user?.note ||
@@ -423,6 +432,7 @@ export default {
           }
         })
       }
+      this.isDisabled = this.user?.disabled
       this.isTenantAdmin = this.user?.role === UserRoles.TenantAdmin
       this.writeSeparateLog = this.user?.writeSeparateLog
       this.note = this.user?.note
@@ -475,6 +485,7 @@ export default {
                 ? UserRoles.TenantAdmin
                 : UserRoles.NormalUser
               : UserRoles.NormalUser,
+            Disabled: this.isDisabled,
             WriteSeparateLog: this.writeSeparateLog,
             Note: this.note,
             Forced: true,

@@ -15,6 +15,7 @@ class UserModel {
     this.name = typesUtils.pString(serverData?.Name)
     this.publicId = typesUtils.pString(serverData?.PublicId)
     this.role = typesUtils.pEnum(serverData?.Role, UserRoles, UserRoles.Anonymous)
+    this.disabled = typesUtils.pBool(serverData?.IsDisabled)
     this.uuid = typesUtils.pString(serverData?.UUID)
     this.quotaBytes = typesUtils.pInt(serverData?.QuotaBytes)
     this.note = typesUtils.pString(serverData?.Note)
@@ -32,21 +33,27 @@ class UserModel {
 
   update (data, allTenantGroups = null) {
     const UserRoles = enums.getUserRoles()
+
     if (data !== null) {
       this.role = typesUtils.pEnum(data?.Role, UserRoles, UserRoles.Anonymous)
     }
+
+    if (data?.IsDisabled) {
+      this.disabled = typesUtils.pBool(data.IsDisabled)
+    }
+
     this.writeSeparateLog = typesUtils.pBool(data?.WriteSeparateLog)
 
     if (data?.PublicId) {
-      this.publicId = typesUtils.pString(data?.PublicId)
+      this.publicId = typesUtils.pString(data.PublicId)
     }
 
     if (data?.QuotaBytes) {
-      this.quotaBytes = typesUtils.pInt(data?.QuotaBytes)
+      this.quotaBytes = typesUtils.pInt(data.QuotaBytes)
     }
 
     if (data?.Note) {
-      this.note = typesUtils.pString(data?.Note)
+      this.note = typesUtils.pString(data.Note)
     }
 
     if (_.isArray(allTenantGroups)) {

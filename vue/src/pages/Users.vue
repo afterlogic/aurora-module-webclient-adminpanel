@@ -75,7 +75,7 @@
             </div>
           </q-toolbar>
 
-          <standard-list
+          <StandardList
             class="col-grow list-border"
             :items="userItems"
             :selectedItem="selectedUserId"
@@ -311,6 +311,12 @@ export default {
 
       this.userItems = this.users.map((user) => {
         const labels = []
+        if (user.disabled) {
+          labels.push({
+            title: this.$t('ADMINPANELWEBCLIENT.LABEL_DISABLED'),
+            cssClass: 'disabled',
+          })
+        }
         if (user.publicId === userPublicId) {
           labels.push({
             title: this.$t('ADMINPANELWEBCLIENT.LABEL_ITS_ME'),

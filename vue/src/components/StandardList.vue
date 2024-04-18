@@ -59,7 +59,7 @@
             </q-item-section>
             <template v-for="label in item.labels" :key="label.title">
               <q-item-section side :color="selectedItem === item.id ? 'white' : 'black'">
-                <span :class="label.cssClass">{{ label.title }}</span>
+                <span class="label" :class="label.cssClass">{{ label.title }}</span>
               </q-item-section>
             </template>
           </q-item>

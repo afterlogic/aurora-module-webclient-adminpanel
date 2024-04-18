@@ -137,10 +137,37 @@ $checked-item: #ebf7cb;
   width: 0.6em;
 }
 
-.me, .admin {
-  background: #f1f1f1;
+.label {
   border-radius: 10px 10px 10px 10px;
   color: #6d6d6d;
   float: right;
   padding: 2px 8px;
+  background: #f1f1f1;
+
+  &.me, &.admin {
+  }
+
+  &.disabled {
+    opacity: 1 !important;
+    height: 16px;
+    width: 16px;
+    overflow: hidden;
+    display: inline-block;
+    padding: 0;
+    border-radius: 50px;
+    border: 2px solid red;
+    background: transparent;
+    &::before {
+      display: inline-block;
+      content: "";
+      width: 1.5px;
+      height: 14.5px;
+      background: red;
+      transform: rotate(-45deg);
+      transform-origin: 0px 0px;
+    }
+    // q-icon material-icons
+  }
 }
+
+

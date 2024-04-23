@@ -38,11 +38,13 @@ class UserModel {
       this.role = typesUtils.pEnum(data?.Role, UserRoles, UserRoles.Anonymous)
     }
 
-    if (data?.IsDisabled) {
+    if (data?.IsDisabled !== undefined) {
       this.disabled = typesUtils.pBool(data.IsDisabled)
     }
 
-    this.writeSeparateLog = typesUtils.pBool(data?.WriteSeparateLog)
+    if (data?.WriteSeparateLog !== undefined) {
+      this.writeSeparateLog = typesUtils.pBool(data?.WriteSeparateLog)
+    }
 
     if (data?.PublicId) {
       this.publicId = typesUtils.pString(data.PublicId)

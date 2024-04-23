@@ -320,6 +320,7 @@ export default {
 
     clear() {
       this.publicId = ''
+      this.isDisabled = false
       this.isTenantAdmin = false
       this.writeSeparateLog = false
       this.note = ''
@@ -485,7 +486,7 @@ export default {
                 ? UserRoles.TenantAdmin
                 : UserRoles.NormalUser
               : UserRoles.NormalUser,
-            Disabled: this.isDisabled,
+            IsDisabled: this.isDisabled,
             WriteSeparateLog: this.writeSeparateLog,
             Note: this.note,
             Forced: true,

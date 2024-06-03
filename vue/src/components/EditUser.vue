@@ -46,7 +46,7 @@
               <q-checkbox dense v-model="isTenantAdmin" :label="$t('ADMINPANELWEBCLIENT.LABEL_USER_IS_TENANT_ADMIN')" />
             </div>
           </div>
-          <div class="row q-mt-md" v-if="!createMode">
+          <div class="row q-mt-md" v-if="!createMode && isUserSuperAdmin">
             <div class="col-2"></div>
             <div class="col-5">
               <q-checkbox

@@ -328,9 +328,8 @@ export default {
         methodName: 'DeleteTenants',
         parameters: {
           IdList: ids,
-          DeletionConfirmedByAdmin: true,
           TenantId: this.currentTenantId,
-          Type: 'Tenant',
+          Type: 'Tenant'
         },
       }).then(result => {
         this.deletingIds = []

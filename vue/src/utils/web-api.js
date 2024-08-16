@@ -34,18 +34,14 @@ export default {
         postData.Parameters = JSON.stringify(parameters)
       }
 
-      // The AuthToken needs to be read from the cookie (not from store) to always match the cookies sent to the server.
       // If a user is also logged in the browser, then his AppData will be received and the login screen will be displayed,
       // because the user is not a superadmin.
-      const authToken = VueCookies.get('AuthToken')
       const deviceId = VueCookies.get('DeviceId')
       const headers = { 'X-Client': 'WebClient' }
       if (deviceId) {
         headers['X-DeviceId'] = deviceId
       }
-      if (authToken) {
-        headers.Authorization = 'Bearer ' + authToken
-      }
+
       axios({
         method: 'post',
         url: urlUtils.getApiHost() + '?/Api/',
@@ -110,10 +106,6 @@ export default {
     return new Promise((resolve, reject) => {
       const headers = {
         'Content-Type': 'multipart/form-data',
-      }
-      const authToken = store.getters['user/getAuthToken']
-      if (authToken) {
-        headers.Authorization = 'Bearer ' + authToken
       }
 
       const data = new FormData()

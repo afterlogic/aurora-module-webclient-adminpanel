@@ -70,7 +70,7 @@ export default {
         }).then(result => {
           this.loading = false
           if (_.isObject(result) && _.isString(result.AuthToken)) {
-            core.setAuthToken(result.AuthToken)
+            core.requestAppData()
           } else {
             notification.showError(this.$t('COREWEBCLIENT.ERROR_PASS_INCORRECT'))
           }

@@ -1,5 +1,4 @@
 import { i18n } from 'boot/i18n'
-import VueCookies from 'vue-cookies'
 
 import _ from 'lodash'
 
@@ -12,60 +11,9 @@ import typesUtils from 'src/utils/types'
 import webApi from 'src/utils/web-api'
 
 import modulesManager from 'src/modules-manager'
-import settings from 'src/settings'
 
 const core = {
   appData: null,
-
-  setAuthTokenCookie(authToken) {
-    const cookieSettings = settings.getCookieSettings()
-    const expire = cookieSettings.authTokenCookieExpireTime > 0 ? cookieSettings.authTokenCookieExpireTime + 'd' : ''
-    VueCookies.set('AuthToken', authToken, expire)
-  },
-
-  setAuthToken(authToken) {
-    const cookieSettings = settings.getCookieSettings()
-    if (_.isEmpty(authToken)) {
-      const currentAuthToken = VueCookies.get('AuthToken')
-      VueCookies.remove('AuthToken')
-      const secondAuthToken = VueCookies.get('AuthToken')
-      if (secondAuthToken === null) {
-        this.commitAuthToken(authToken)
-      } else if (secondAuthToken === currentAuthToken) {
-        VueCookies.remove('AuthToken', cookieSettings.cookieBasePath)
-        this.commitAuthToken(authToken)
-      } else {
-        webApi
-          .sendRequest({
-            moduleName: 'Core',
-            methodName: 'GetAppData',
-            parameters: {},
-          })
-          .then(
-            (result) => {
-              const UserRoles = enums.getUserRoles()
-              if (result?.User?.Role === UserRoles.SuperAdmin) {
-                VueCookies.remove('AuthToken', cookieSettings.cookieBasePath)
-              } else if (result?.User?.Role === UserRoles.TenantAdmin) {
-                authToken = secondAuthToken
-              }
-              this.commitAuthToken(authToken)
-            },
-            (response) => {
-              this.commitAuthToken(authToken)
-            }
-          )
-      }
-    } else {
-      this.setAuthTokenCookie(authToken)
-      this.commitAuthToken(authToken)
-    }
-  },
-
-  commitAuthToken(authToken) {
-    store.commit('user/setAuthToken', authToken)
-    this.requestAppData()
-  },
 
   parseTenantsFromAppData() {
     const adminPanelWebclientData = typesUtils.pObject(this.appData?.AdminPanelWebclient)
@@ -105,11 +53,6 @@ const core = {
               this.setAppData(result).then(() => {
                 if (store.getters['user/isUserSuperAdminOrTenantAdmin']) {
                   this.parseTenantsFromAppData()
-                  // Resets AuthToken cookie to continue signing in period,
-                  // also to make sure that AuthToken cookie is set with the correct path
-                  this.setAuthTokenCookie(store.getters['user/getAuthToken'])
-                } else if (VueCookies.get('AuthToken') !== null && store.getters['user/isUserAnonymous']) {
-                  this.setAuthToken('')
                 }
                 resolve()
               }, reject)
@@ -147,17 +90,17 @@ export default {
       })
       .then(
         () => {
-          core.setAuthToken('')
+          core.requestAppData()
           afterLogoutCallback()
         },
         () => {
-          core.setAuthToken('')
+          core.requestAppData()
           afterLogoutCallback()
         }
       )
   },
 
-  setAuthToken: core.setAuthToken.bind(core),
+  requestAppData: core.requestAppData.bind(core),
 
   getAppData() {
     return core.appData

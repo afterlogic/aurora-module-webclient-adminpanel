@@ -44,7 +44,7 @@ class AdminPanelSettings {
     this.dbHost = typesUtils.pString(coreData.DBHost)
     this.dbLogin = typesUtils.pString(coreData.DBLogin)
     this.dbName = typesUtils.pString(coreData.DBName)
-    this.saltNotEmpty = typesUtils.pBool(coreData.SaltNotEmpty)
+    this.encryptionKeyNotEmpty = typesUtils.pBool(coreData.EncryptionKeyNotEmpty)
 
     const coreWebclientData = typesUtils.pObject(appData.CoreWebclient)
     this.baseUrl = typesUtils.pString(coreWebclientData.BaseUrl)
@@ -77,8 +77,8 @@ class AdminPanelSettings {
           0
         )
       }
-      if (!this.saltNotEmpty) {
-        notification.showError(i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_SALT_EMPTY'), 0)
+      if (!this.encryptionKeyNotEmpty) {
+        notification.showError(i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_ENCRYPTION_KEY_EMPTY'), 0)
       }
       if (this.dbLogin === '' || this.dbHost === '' || this.dbName === '') {
         this.dismissDbError = notification.showError(i18n.global.tc('ADMINPANELWEBCLIENT.ERROR_DB_ACCESS'), 0)

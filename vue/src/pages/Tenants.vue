@@ -7,14 +7,14 @@
           <q-toolbar class="col-auto q-py-sm list-border" v-if=isUserSuperAdmin>
             <q-btn flat color="grey-8" size="mg" no-wrap :disable="checkedIds.length === 0"
                    @click="askDeleteCheckedTenants">
-              <Trash></Trash>
+              <IconTrash />
               <span>{{ countLabel }}</span>
               <q-tooltip>
                 {{ $t('COREWEBCLIENT.ACTION_DELETE') }}
               </q-tooltip>
             </q-btn>
             <q-btn flat color="grey-8" size="mg" @click="routeCreateTenant">
-              <Add></Add>
+              <IconAdd />
               <q-tooltip>
                 {{ $t('ADMINPANELWEBCLIENT.ACTION_CREATE_ENTITY_TENANT') }}
               </q-tooltip>
@@ -88,8 +88,8 @@ import settings from 'src/settings'
 import MainLayout from 'src/layouts/MainLayout'
 import ConfirmDialog from 'components/ConfirmDialog'
 import StandardList from 'components/StandardList'
-import Add from 'src/assets/icons/Add'
-import Trash from 'src/assets/icons/Trash'
+import IconAdd from 'src/assets/icons/Add'
+import IconTrash from 'src/assets/icons/Trash'
 
 export default {
   name: 'Tenants',
@@ -98,8 +98,8 @@ export default {
     MainLayout,
     ConfirmDialog,
     StandardList,
-    Add,
-    Trash
+    IconAdd,
+    IconTrash
   },
 
   data() {

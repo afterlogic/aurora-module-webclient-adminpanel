@@ -7,14 +7,14 @@
           <q-toolbar class="col-auto q-py-sm list-border">
             <q-btn flat color="grey-8" size="mg" no-wrap :disable="checkedIds.length === 0"
                    @click="askDeleteCheckedGroups">
-              <Trash></Trash>
+              <IconTrash />
               <span>{{ countLabel }}</span>
               <q-tooltip>
                 {{ $t('COREWEBCLIENT.ACTION_DELETE') }}
               </q-tooltip>
             </q-btn>
             <q-btn flat color="grey-8" size="mg" @click="routeCreateGroup">
-              <Add></Add>
+              <IconAdd />
               <q-tooltip>
                 {{ $t('ADMINPANELWEBCLIENT.ACTION_CREATE_ENTITY_GROUP') }}
               </q-tooltip>
@@ -28,7 +28,7 @@
           >
             <template v-slot:right-icon="scope">
               <q-item-section side>
-                <team-group-icon :size="24" :color="scope.color"></team-group-icon>
+                <IconTeamGroup :size="24" :color="scope.color" />
               </q-item-section>
             </template>
           </standard-list>
@@ -56,9 +56,9 @@ import settings from 'src/settings'
 import MainLayout from 'src/layouts/MainLayout'
 import ConfirmDialog from 'components/ConfirmDialog'
 import StandardList from 'components/StandardList'
-import Add from 'src/assets/icons/Add'
-import TeamGroupIcon from 'src/assets/icons/TeamGroup'
-import Trash from 'src/assets/icons/Trash'
+import IconAdd from 'src/assets/icons/Add'
+import IconTeamGroup from 'src/assets/icons/TeamGroup'
+import IconTrash from 'src/assets/icons/Trash'
 
 export default {
   name: 'Groups',
@@ -67,9 +67,9 @@ export default {
     MainLayout,
     ConfirmDialog,
     StandardList,
-    Add,
-    TeamGroupIcon,
-    Trash,
+    IconAdd,
+    IconTeamGroup,
+    IconTrash,
   },
 
   data() {

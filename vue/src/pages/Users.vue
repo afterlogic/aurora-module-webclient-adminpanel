@@ -18,14 +18,14 @@
                 :disable="checkedIds.length === 0"
                 @click="askDeleteCheckedUsers"
               >
-                <trash-icon></trash-icon>
+                <IconTrash />
                 <span>{{ countLabel }}</span>
                 <q-tooltip>
                   {{ $t('COREWEBCLIENT.ACTION_DELETE') }}
                 </q-tooltip>
               </q-btn>
               <q-btn flat color="grey-8" size="mg" @click="routeCreateUser" v-if="allowCreateUser">
-                <add-icon></add-icon>
+                <IconAdd />
                 <q-tooltip>
                   {{ $t('ADMINPANELWEBCLIENT.ACTION_CREATE_ENTITY_USER') }}
                 </q-tooltip>
@@ -38,7 +38,7 @@
                   :disable="checkedOrSelectedUsersIds.length === 0 || groups.length === 0"
                 >
                   <template v-slot:label>
-                    <add-to-group-icon></add-to-group-icon>
+                    <IconAddToGroup />
                     <q-tooltip>
                       {{ $t('ADMINPANELWEBCLIENT.ACTION_ADD_USER_TO_GROUP') }}
                     </q-tooltip>
@@ -58,7 +58,7 @@
                   </q-list>
                 </q-btn-dropdown>
                 <q-btn flat color="grey-8" size="mg" @click="removeFromGroup" :disable="disableRemoveFromGroup">
-                  <remove-from-group-icon></remove-from-group-icon>
+                  <IconRemoveFromGroup />
                   <q-tooltip>
                     {{ $t('ADMINPANELWEBCLIENT.ACTION_REMOVE_USER_FROM_GROUP') }}
                   </q-tooltip>
@@ -172,10 +172,10 @@ import MainLayout from 'src/layouts/MainLayout'
 import ConfirmDialog from 'src/components/ConfirmDialog'
 import StandardList from 'src/components/StandardList'
 
-import AddIcon from 'src/assets/icons/Add'
-import AddToGroupIcon from 'src/assets/icons/AddToGroup'
-import RemoveFromGroupIcon from 'src/assets/icons/RemoveFromGroup'
-import TrashIcon from 'src/assets/icons/Trash'
+import IconAdd from 'src/assets/icons/Add'
+import IconAddToGroup from 'src/assets/icons/AddToGroup'
+import IconRemoveFromGroup from 'src/assets/icons/RemoveFromGroup'
+import IconTrash from 'src/assets/icons/Trash'
 
 import enums from 'src/enums'
 let UserRoles = {}
@@ -187,10 +187,10 @@ export default {
     MainLayout,
     ConfirmDialog,
     StandardList,
-    AddIcon,
-    AddToGroupIcon,
-    RemoveFromGroupIcon,
-    TrashIcon,
+    IconAdd,
+    IconAddToGroup,
+    IconRemoveFromGroup,
+    IconTrash,
   },
 
   data() {

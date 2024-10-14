@@ -9,7 +9,7 @@
           <q-item-section class="non-selectable">
             <q-item-label>
               <span>{{ scope.opt.label }}</span>
-              <team-group-icon class="on-right vertical-bottom" :size="18" v-if="scope.opt.isTeam"></team-group-icon>
+              <IconTeamGroup class="on-right vertical-bottom" :size="18" v-if="scope.opt.isTeam" />
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -22,7 +22,7 @@
 import typesUtils from 'src/utils/types'
 import settings from 'src/settings'
 
-import TeamGroupIcon from 'assets/icons/TeamGroup'
+import IconTeamGroup from 'assets/icons/TeamGroup'
 
 export default {
   name: 'GroupFilterForUsers',
@@ -39,7 +39,7 @@ export default {
   },
 
   components: {
-    TeamGroupIcon,
+    IconTeamGroup,
   },
 
   computed: {

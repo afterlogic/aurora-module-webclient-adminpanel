@@ -39,6 +39,11 @@ const core = {
     })
   },
 
+  resetAppData() {
+    this.appData = null
+    store.dispatch('user/resetAppData')
+  },
+
   requestAppData() {
     return new Promise((resolve, reject) => {
       webApi
@@ -90,17 +95,18 @@ export default {
       })
       .then(
         () => {
-          core.requestAppData()
+          core.resetAppData()
           afterLogoutCallback()
         },
         () => {
-          core.requestAppData()
+          core.resetAppData()
           afterLogoutCallback()
         }
       )
   },
 
   requestAppData: core.requestAppData.bind(core),
+  resetAppData: core.resetAppData.bind(core),
 
   getAppData() {
     return core.appData

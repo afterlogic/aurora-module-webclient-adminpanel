@@ -19,11 +19,18 @@ export default {
         state.userPublicId = user.publicId
       }
     },
+    resetUserData(state) {
+      state.userRole = null
+      state.userPublicId = null
+    },
   },
 
   actions: {
     parseAppData({ commit }, appData) {
       commit('setUserData', appData.User)
+    },
+    resetAppData({ commit }) {
+      commit('resetUserData')
     },
   },
 

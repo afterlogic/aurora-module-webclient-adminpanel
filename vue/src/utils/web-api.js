@@ -3,6 +3,7 @@ import axios from 'axios'
 import { saveAs } from 'file-saver'
 import VueCookies from 'vue-cookies'
 
+import { generateUUID } from 'src/utils/common'
 import errors from 'src/utils/errors'
 import urlUtils from 'src/utils/url'
 import notification from 'src/utils/notification'
@@ -36,11 +37,15 @@ export default {
 
       // If a user is also logged in the browser, then his AppData will be received and the login screen will be displayed,
       // because the user is not a superadmin.
-      const deviceId = VueCookies.get('DeviceId')
       const headers = { 'X-Client': 'WebClient' }
-      if (deviceId) {
-        headers['X-DeviceId'] = deviceId
+
+      let deviceId = VueCookies.get('DeviceId')
+      if (!deviceId) {
+          deviceId = generateUUID()
+          VueCookies.set('DeviceId', deviceId, { expires: 365 })
       }
+
+      headers['X-DeviceId'] = deviceId
 
       axios({
         method: 'post',

@@ -53,6 +53,7 @@ export default {
         data: new URLSearchParams(postData),
         headers,
         signal,
+        withCredentials: true,
       }).then(
         (response) => {
           const isOkResponse = response?.status === 200 && !!response?.data
@@ -126,6 +127,7 @@ export default {
         url: urlUtils.getApiHost() + '?/Api/',
         data: data,
         headers: headers,
+        withCredentials: true,
       }).then((oResponse) => {
         if (oResponse) {
           let resData = oResponse.data.split('\n')

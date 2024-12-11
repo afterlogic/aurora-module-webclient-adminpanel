@@ -36,7 +36,8 @@
               <div class="col-2 q-my-sm"></div>
               <div class="col-5">
                 <q-btn unelevated no-caps dense class="q-px-sm" :ripple="false" color="primary"
-                       :label="$t('ADMINPANELWEBCLIENT.BUTTON_DB_TEST_CONNECTION')" @click="testDbConnection">
+                    :loading="testingConnection"
+                    :label="$t('ADMINPANELWEBCLIENT.BUTTON_TEST_CONNECTION')" @click="testDbConnection">
                 </q-btn>
               </div>
             </div>
@@ -67,7 +68,8 @@
               <div class="col-2 q-my-sm"></div>
               <div class="col-5">
                 <q-btn unelevated no-caps dense class="q-px-sm" :ripple="false" color="primary"
-                       :label=" $t('ADMINPANELWEBCLIENT.BUTTON_UPDATE_CONFIG') " @click="updateConfig">
+                  :loading="updatingConfiguration"
+                  :label="$t('ADMINPANELWEBCLIENT.BUTTON_UPDATE_CONFIG')" @click="updateConfig">
                 </q-btn>
               </div>
             </div>
@@ -228,13 +230,13 @@ export default {
         }).then(result => {
           this.testingConnection = false
           if (result === true) {
-            notification.showReport(this.$t('ADMINPANELWEBCLIENT.REPORT_DB_CONNECT_SUCCESSFUL'))
+            notification.showReport(this.$t('ADMINPANELWEBCLIENT.REPORT_CONNECT_SUCCESSFUL'))
           } else {
-            notification.showError(this.$t('ADMINPANELWEBCLIENT.ERROR_DB_CONNECT_FAILED'))
+            notification.showError(this.$t('ADMINPANELWEBCLIENT.ERROR_CONNECT_FAILED'))
           }
         }, response => {
           this.testingConnection = false
-          notification.showError(errors.getTextFromResponse(response, this.$t('ADMINPANELWEBCLIENT.ERROR_DB_CONNECT_FAILED')))
+          notification.showError(errors.getTextFromResponse(response, this.$t('ADMINPANELWEBCLIENT.ERROR_CONNECT_FAILED')))
         })
       }
     },

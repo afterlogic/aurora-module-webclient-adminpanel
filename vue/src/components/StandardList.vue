@@ -169,6 +169,7 @@ export default {
 
   methods: {
     startSearch() {
+      this.selectedPage = 1
       this.$emit('route')
     },
 

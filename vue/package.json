@@ -19,6 +19,7 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^1.2.1",
     "core-js": "^3.6.5",
+    "dotenv": "^16.4.7",
     "file-saver": "^2.0.5",
     "iniparser": "^1.0.5",
     "moment": "^2.29.4",

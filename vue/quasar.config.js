@@ -5,6 +5,8 @@
  * the ES6 features that are supported by your Node version. https://node.green/
  */
 
+require('dotenv').config()
+
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js
 
@@ -47,7 +49,8 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       env: {
-        API: ctx.dev ? 'http://platform.de/' : '',
+        ...process.env,
+        API: ctx.dev ? process.env.API_URL : '',
       },
       // transpile: false,
       // publicPath: '/',

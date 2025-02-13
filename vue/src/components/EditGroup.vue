@@ -255,13 +255,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-a {
-  text-decoration: none;
-  color: darken($primary, 20%);
-}
-a:hover {
-  text-decoration: underline;
-}
-</style>

@@ -25,7 +25,6 @@
     "moment": "^2.29.4",
     "quasar": "^2.6.0",
     "tiny-emitter": "^2.1.0",
-    "underscore": "^1.13.6",
     "vue": "^3.0.0",
     "vue-cookies": "^1.8.3",
     "vue-i18n": "^9.0.0",

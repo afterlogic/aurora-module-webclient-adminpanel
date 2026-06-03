@@ -52,21 +52,13 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
      */
     public function GetSettings()
     {
+        // Only TenantAdmin or higher may request admin panel settings
         \Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::TenantAdmin);
-
-        $aTenants = [];
-
-        try {
-            // Settings should be obtainable even if db is not configured yet
-            $aTenants = \Aurora\Modules\Core\Module::Decorator()->GetTenants(0, 0, '');
-        } catch (\Exception $ex) {
-        }
 
         return array(
             'EntitiesPerPage' => $this->oModuleSettings->EntitiesPerPage,
             'TabsOrder' => $this->oModuleSettings->TabsOrder,
             'EntitiesOrder' => $this->oModuleSettings->EntitiesOrder,
-            'Tenants' => $aTenants,
         );
     }
 }

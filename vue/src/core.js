@@ -7,7 +7,6 @@ import enums from 'src/enums'
 
 import errors from 'src/utils/errors'
 import notification from 'src/utils/notification'
-import typesUtils from 'src/utils/types'
 import webApi from 'src/utils/web-api'
 
 import modulesManager from 'src/modules-manager'
@@ -15,14 +14,11 @@ import modulesManager from 'src/modules-manager'
 const core = {
   appData: null,
 
-  parseTenantsFromAppData() {
-    const adminPanelWebclientData = typesUtils.pObject(this.appData?.AdminPanelWebclient)
-    const tenantsData = typesUtils.pArray(adminPanelWebclientData?.Tenants?.Items)
-    if (tenantsData.length > 0) {
-      store.dispatch('tenants/parseTenants', tenantsData)
-    } else {
-      store.dispatch('tenants/requestTenants')
-    }
+  /**
+   * Initialize tenants data for the admin UI.
+   */
+  initTenants() {
+    store.dispatch('tenants/requestTenants')
   },
 
   setAppData(appData) {
@@ -57,7 +53,7 @@ const core = {
             if (_.isObject(result)) {
               this.setAppData(result).then(() => {
                 if (store.getters['user/isUserSuperAdminOrTenantAdmin']) {
-                  this.parseTenantsFromAppData()
+                  this.initTenants()
                 }
                 resolve()
               }, reject)

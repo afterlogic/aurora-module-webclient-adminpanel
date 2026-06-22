@@ -50,10 +50,20 @@ if (fs.existsSync(srcDir)) {
   console.log('Start to create index.php...')
   const indexPhpContent = `<?php
   include_once '../system/autoload.php';
-  
+
   use Aurora\\System\\Api;
   use Aurora\\System\\Application;
-  
+
+  // Override aurora-mobile=1 from mobile webclient (path /) so admin API uses desktop modules.
+  @\\setcookie(
+    \\Aurora\\System\\Managers\\Integrator::MOBILE_KEY,
+    '0',
+    \\strtotime('+200 days'),
+    '/',
+    null,
+    false
+  );
+
   if (is_array($_GET) && count($_GET) > 0) {
   \tApi::Init();
   \tApplication::setBaseUrl(\\substr(Application::getBaseUrl(), 0, -strlen(basename(__DIR__))-1));

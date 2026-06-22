@@ -22,16 +22,16 @@ const removeDir = function(path) {
   }
 }
 
-require('./prepare-files')
+require('./prepare-files.cjs')
 
 console.log('Start building the app...')
 const execSync = require('child_process').execSync
 
+const buildEnv = { ...process.env }
 if (parseInt(process.version.match(/^v*(\d+)/)[1]) >= 17) {
-  execSync('quasar build', { env: { NODE_OPTIONS: '--openssl-legacy-provider' } })
-} else {
-  execSync('quasar build')
+  buildEnv.NODE_OPTIONS = [buildEnv.NODE_OPTIONS, '--openssl-legacy-provider'].filter(Boolean).join(' ')
 }
+execSync('npx quasar build', { env: buildEnv, stdio: 'inherit' })
 
 const srcDir = './dist/spa'
 if (fs.existsSync(srcDir)) {

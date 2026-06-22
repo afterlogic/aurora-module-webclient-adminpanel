@@ -1,4 +1,4 @@
-import { route } from 'quasar/wrappers'
+import { defineRouter } from '#q-app/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 
@@ -18,7 +18,7 @@ import settings from 'src/settings'
  * with the Router instance.
  */
 
-export default route(function (/* { store, ssrContext } */) {
+export default defineRouter(function (/* { store, ssrContext } */) {
   // const Router = new VueRouter({
   //   scrollBehavior: () => ({ x: 0, y: 0 }),
   //   routes,

@@ -17,6 +17,7 @@ export default defineConfig(function (ctx) {
 
     build: {
       vueRouterMode: 'hash',
+      publicPath: '/adminpanel/',
       env: {
         API: ctx.dev ? 'http://platform.de/' : '',
       },

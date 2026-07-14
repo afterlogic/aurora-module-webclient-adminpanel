@@ -30,9 +30,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 import core from 'src/core'
+import modulesManager from 'src/modules-manager'
 
 import errors from 'src/utils/errors'
 import notification from 'src/utils/notification'
@@ -57,6 +56,16 @@ export default {
     }
   },
   methods: {
+    finishLogin () {
+      return core.requestAppData().then(() => {
+        if (this.$store.getters['user/isUserSuperAdminOrTenantAdmin']) {
+          const defaultRoute = modulesManager.getDefaultRouteForUser()
+          return this.$router.push(defaultRoute?.path || '/system')
+        }
+        return Promise.reject()
+      })
+    },
+
     proceedLogin () {
       if (!this.loading) {
         this.loading = true
@@ -67,14 +76,14 @@ export default {
             Login: this.login,
             Password: this.password,
           },
-        }).then(result => {
+        }).then(() => {
+          return this.finishLogin()
+        }).catch(() => {
+          // Session cookie may be set even when API returns AuthError (superadmin quirk).
+          return this.finishLogin()
+        }).then(() => {
           this.loading = false
-          if (_.isObject(result) && _.isString(result.AuthToken)) {
-            core.setAuthToken(result.AuthToken)
-          } else {
-            notification.showError(this.$t('COREWEBCLIENT.ERROR_PASS_INCORRECT'))
-          }
-        }, response => {
+        }, (response) => {
           this.loading = false
           notification.showError(errors.getTextFromResponse(response, this.$t('COREWEBCLIENT.ERROR_PASS_INCORRECT')))
         })

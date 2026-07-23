@@ -29,7 +29,9 @@ const mixins = {
       return oComponent
     },
     doBeforeRouteLeave: function (to, from, next) {
-      const oAppComponent = this._getParentComponent('App')
+      const oAppComponent = this.$options.name === 'App'
+        ? this
+        : this._getParentComponent('App')
       const oUnsavedChangesDialog = oAppComponent ? oAppComponent.$refs.unsavedChangesDialog : null
 
       if (

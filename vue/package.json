@@ -6,6 +6,7 @@
   "author": "Afterlogic",
   "private": true,
   "scripts": {
+    "dev": "node build-scripts/prepare-files.js && quasar dev",
     "prepare-modules": "node build-scripts/prepare-modules.js",
     "prepare-stores": "node build-scripts/prepare-stores.js",
     "prepare-langs": "node build-scripts/prepare-langs.js",

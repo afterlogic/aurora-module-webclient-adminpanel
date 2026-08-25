@@ -1,5 +1,5 @@
 <template>
-  <main-layout>
+  <main-layout force-reload-tenants>
     <q-splitter :after-class="!showTabs ? 'q-splitter__right-panel' : ''" class="full-height full-width"
                 v-model="listSplitterWidth" :limits="[10,30]">
       <template v-slot:before>

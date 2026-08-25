@@ -71,6 +71,13 @@ export default {
 
   components: {},
 
+  props: {
+    forceReloadTenants: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   data() {
     return {
       routes: [],
@@ -121,7 +128,10 @@ export default {
 
   mounted() {
     this.selectedTenantId = this.currentTenantId
-    this.$store.dispatch('tenants/requestTenants')
+
+    if (this.forceReloadTenants || this.$store.getters['tenants/getTenants'].length === 0) {
+      this.$store.dispatch('tenants/requestTenants')
+    }
 
     const userRole = this.$store.getters['user/getUserRole']
     this.routes = modulesManager.getRoutesForUserRole(userRole)

@@ -60,7 +60,7 @@ export default {
     },
 
     requestTenants ({ dispatch }) {
-      if (store.getters['user/isUserSuperAdmin']) {
+      if (store.getters['user/isUserSuperAdminOrTenantAdmin']) {
         webApi.sendRequest({
           moduleName: 'Core',
           methodName: 'GetTenants',

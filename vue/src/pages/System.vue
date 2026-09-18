@@ -1,6 +1,6 @@
 <template>
   <main-layout>
-    <q-splitter after-class="q-splitter__right-panel" class="full-height full-width" v-model="splitterWidth"
+    <q-splitter data-test-id="admin-system-page" after-class="q-splitter__right-panel" class="full-height full-width" v-model="splitterWidth"
                 :limits="[10,30]">
       <template v-slot:before>
         <q-scroll-area class="full-height full-width">

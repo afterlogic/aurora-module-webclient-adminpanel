@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="hHh LpR lfr">
-    <q-header>
+  <q-layout view="hHh LpR lfr" data-test-id="admin-shell">
+    <q-header data-test-id="admin-header">
       <q-tabs class="q-py-sm" v-bind:class="getTabsBarClass()" no-caps align="left" indicator-color="transparent">
         <template v-for="route in routes">
           <q-route-tab
@@ -8,6 +8,7 @@
             :to="route.path"
             :ripple="false"
             class="q-px-none"
+            :data-test-id="'admin-nav-' + route.name"
             v-if="route.name !== 'tenants'"
           >
             <div class="q-px-md tab-label">{{ $t(route.pageTitle) }}</div>
@@ -17,6 +18,7 @@
             to="/tenants"
             :ripple="false"
             class="q-px-none"
+            data-test-id="admin-nav-tenants"
             v-if="route.name === 'tenants'"
           >
             <div class="q-px-md tab-label">
@@ -49,7 +51,7 @@
           </q-btn-dropdown>
         </template>
         <q-space />
-        <q-tab :ripple="false" class="q-px-none q-tab--logout" @click="logout" v-if="!isIframe">
+        <q-tab data-test-id="admin-logout" :ripple="false" class="q-px-none q-tab--logout" @click="logout" v-if="!isIframe">
           <div class="q-px-md tab-label" v-t="'COREWEBCLIENT.ACTION_LOGOUT'"></div>
         </q-tab>
       </q-tabs>

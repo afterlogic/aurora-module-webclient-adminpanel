@@ -1,6 +1,7 @@
 <template>
   <main-layout>
     <q-splitter
+      data-test-id="admin-users-page"
       :after-class="!showTabs ? 'q-splitter__right-panel' : ''"
       class="full-height full-width"
       v-model="listSplitterWidth"
